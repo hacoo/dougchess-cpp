@@ -3,17 +3,21 @@
 #
 # Top-level makefile for Dougchess.
 
-CC       := g++
-SRCDIR   := src
-BUILDDIR := build
-TARGET   := bin/dougchess
+CC        := g++
+C_CC      := gcc
+SRCDIR    := src
+BUILDDIR  := build
+TARGET    := bin/dougchess
 
-SRCEXT   := cpp
-SOURCES  := $(wildcard $(SRCDIR)/*.$(SRCEXT))
-OBJECTS  := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
-CFLAGS   := -g -Wall # -O3
-LIB      := -pthread -L lib
-INC      := -I include
+SRCEXT    := cpp
+C_SRCEXT  := c
+SOURCES   := $(wildcard $(SRCDIR)/*.$(SRCEXT))
+C_SOURCES := $(wildard $(SRCDIR/*.$(C_SRCEXT)))
+OBJECTS   := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
+OBJECTS   += $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(C_SOURCES:.$(C_SRCEXT)=.o))
+CFLAGS    := -g -Wall -std=c++1y # -O3
+LIB       := -pthread -lm -lzmq -L lib
+INC       := -I include
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
@@ -21,7 +25,6 @@ $(TARGET): $(OBJECTS)
 	@echo "---- COMPILED OK ----"
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@echo " Compiling..."
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
