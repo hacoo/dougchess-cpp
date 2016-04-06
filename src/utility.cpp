@@ -67,7 +67,6 @@ string board_to_string(const char board[RANKS][FILES]) {
 // Return the position of a piece on the board. If it's
 // not found, return -1.
 int find_piece(const char board[RANKS][FILES], char piece) {
-
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
       if (board[y][x] == piece)

@@ -48,11 +48,18 @@ string Board::toString() const {
 // Return the winner, or '?' if the game is not yet decided.
 // Will return a draw if both kings die, or the time runs out.
 char Board::winner() const {
-  if (turn >= 41)
+  if (turn > 41)
     return '=';
-  
+
   bool white_alive = (find_piece(board, 'K') != -1);
   bool black_alive = (find_piece(board, 'k') != -1);
+
+  if (turn == 41) {
+    if (player == 'W' && black_alive && !white_alive) 
+      return 'B';
+    else
+      return '=';
+  }
   
   if (white_alive && black_alive)
     return '?';

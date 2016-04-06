@@ -7,7 +7,8 @@
 //
 // main_board is the current state of the game. However,
 // in the long run, this class will probably hold several other
-// boards as well, representing different search paths.
+// boards as well, representing different search paths. For now,
+// it mostly acts as a wrapper for the main board.
 
 #include"Game.h"
 
