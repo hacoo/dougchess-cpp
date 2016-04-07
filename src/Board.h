@@ -17,6 +17,7 @@
 #include <numeric>
 #include "rules.h"
 #include "utility.h"
+#include "Eval.h"
 
 class Board {
 

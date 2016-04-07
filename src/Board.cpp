@@ -22,7 +22,6 @@ Board::Board() {
 }
 
 Board::~Board() {
-
 }
 
 
@@ -73,7 +72,7 @@ char Board::winner() const {
   return '=';
 } 
 
-// Reset to starting game state
+// Reset to starting game state  
 void Board::reset() {
   turn = 1;
   player = 'W';
@@ -93,7 +92,6 @@ void Board::reset() {
 // Set the board to the contents of b.
 void Board::boardSet(const string& b) {
   parse_board(b, &turn, &player, board);
-  cout << repr();  
 }
 
 // Get all available moves for the current turn
@@ -155,7 +153,7 @@ bool Board::isNothing(char piece) const {
 }
 
 int Board::eval() const {
-  return 0;
+  return Eval::score_simple(board, player);
 }
 
 
@@ -168,7 +166,6 @@ void Board::move(const string& m) {
 void Board::undo() {
   return;
 }
-
 
 // Make a random move, return the move made.
 // Will modify the board state.
