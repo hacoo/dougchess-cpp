@@ -180,9 +180,9 @@ void Client::handle_json(cJSON* in, cJSON* out) {
 		  "chess_isValid") == 0) {
     cJSON_AddBoolToObject(out,
 			  "boolReturn", 
-			  isValid(cJSON_GetObjectItem(in, "intX")
+			  isValid(cJSON_GetObjectItem(in, "intY")
 				  ->valueint, 
-				  cJSON_GetObjectItem(in, "intY")
+				  cJSON_GetObjectItem(in, "intX")
 				  ->valueint));    
   }
 

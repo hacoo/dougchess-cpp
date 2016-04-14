@@ -20,6 +20,8 @@ class SimpleScoreTable {
     scores[0]['Q'] = 9.0;
     scores[0]['r'] = -5.0;
     scores[0]['R'] = 5.0;
+    scores[1]['b'] = -3.0;
+    scores[1]['B'] = 3.0;
     scores[0]['n'] = -3.0;
     scores[0]['N'] = 3.0;
     scores[0]['p'] = -1.0;
@@ -32,6 +34,8 @@ class SimpleScoreTable {
     scores[1]['Q'] = -9.0;
     scores[1]['r'] = 5.0;
     scores[1]['R'] = -5.0;
+    scores[1]['b'] = 3.0;
+    scores[1]['B'] = -3.0;
     scores[1]['n'] = 3.0;
     scores[1]['N'] = -3.0;
     scores[1]['p'] = 1.0;
@@ -48,8 +52,8 @@ static SimpleScoreTable simple_score_table;
 #define RANKS 6
 #define FILES 5
 #define DUMPSIZE 41
-#define isValid(x, y) ((x > -1) && (x < FILES) && (y > -1) && (y < RANKS))
-#define rankLookup(r) r + 48
+#define isValid(y, x) ((x > -1) && (x < FILES) && (y > -1) && (y < RANKS))
+#define rankLookup(r) (RANKS-r) + 48
 #define fileLookup(f) f + 97 
 #define ownp(piece, owner) ((owner == 'W') ? isupper(piece) : islower(piece))
 #define enemyp(piece, owner) ((owner == 'W') ? islower(piece) : isupper(piece))
@@ -65,8 +69,8 @@ class Square {
   Square(const Square& other) : rank(other.rank), file(other.file) {}
   ~Square() {}
   std::string toString() {
-    char temp[3] = { (char) fileLookup(file),
-		     (char) rankLookup(rank), 
+    char temp[4] = { (char) fileLookup(file),
+		     (char) rankLookup(rank),
 		     '\0' };
     return std::string(temp);
   }
@@ -83,7 +87,7 @@ class Move {
   Move(Square start, Square finish) : start(start), finish(finish) {}
   ~Move() {}
   std::string toString() {
-    return start.toString() + "-" + finish.toString();
+    return start.toString() + "-" + finish.toString() + "\n";
   }
   
  private:

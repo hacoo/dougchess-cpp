@@ -22,14 +22,46 @@ class Movegen {
   Movegen();
   ~Movegen();
   static void generateMoves(const char board[RANKS][FILES],
-			    const char player,
+			    char player,
 			    std::vector<Move>& ms);
 
   static void insertPieceMove(const char board[RANKS][FILES],
-			      const char player,
+			      char player,
 			      int rank,
 			      int file,
 			      std::vector<Move>& ms);
+
+  static void insertKingMoves(const char board[RANKS][FILES],
+			      char player,
+			      int rank,
+			      int file,
+			      std::vector<Move>& ms);
+
+  static void insertPawnMoves(const char board[RANKS][FILES],
+			      char player,
+			      int rank,
+			      int file,
+			      std::vector<Move>& ms);
+
+  static void insertKnightMoves(const char board[RANKS][FILES],
+				char player,
+				int rank,
+				int file,
+				std::vector<Move>& ms);
+
+  static void insertRookMoves(const char board[RANKS][FILES],
+			      char player,
+			      int rank,
+			      int file,
+			      std::vector<Move>& ms);
+
+
+
+  static void sanityCheck(const char board[RANKS][FILES],
+			  char player,
+			  char expected,
+			  int rank,
+			  int file);
 
   
  private:
