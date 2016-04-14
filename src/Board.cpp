@@ -94,28 +94,22 @@ void Board::boardSet(const string& b) {
   parse_board(b, &turn, &player, board);
 }
 
-// Get all available moves for the current turn
-vector<string> Board::moves() const {
-  vector<string> ms;
-
-  ms.push_back("a2-a3\n");
-  ms.push_back("b2-b3\n");
-  ms.push_back("c2-c3\n");
-  ms.push_back("d2-d3\n");
-  ms.push_back("e2-e3\n");
-  ms.push_back("b1-a3\n");
-  ms.push_back("b1-c3\n");
-  
+// Get all available moves for the current player in 
+// this board configuration. Return as a vector of strings.
+vector<Move> Board::moves() const {
+  vector<Move> ms;
+  mgen.generateMoves(board, player, ms);
   return ms;
 }
 
+
 // Return moves in random order
-vector<string> Board::movesShuffled() const {
+vector<Move> Board::movesShuffled() const {
   return moves();
 }
 
 // Return moves in order of evaluation
-vector<string> Board::movesEvaluated() const {
+vector<Move> Board::movesEvaluated() const {
   return moves();
 }
 
@@ -128,28 +122,15 @@ int Board::getTurn() const {
 }
 
 bool Board::isEnemy(char piece) const {
-  if (piece == '.')
-    return false;
-  bool uppercase = isupper(piece);
-  if (player == 'W')
-    return !uppercase;
-  else
-    return uppercase;
+  return enemyp(piece, player);
 }
 
 bool Board::isOwn(char piece) const {
-  if (piece == '.')
-    return false;
-  bool uppercase = isupper(piece);
-  if (player == 'W')
-    return uppercase;
-  else
-    return !uppercase;
-
+  return ownp(piece, player);
 }
 
 bool Board::isNothing(char piece) const {
-  return (piece == '.');
+  return emptyp(piece);
 }
 
 int Board::eval() const {

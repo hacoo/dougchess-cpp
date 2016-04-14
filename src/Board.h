@@ -18,6 +18,7 @@
 #include "rules.h"
 #include "utility.h"
 #include "Eval.h"
+#include "Movegen.h"
 
 class Board {
 
@@ -30,9 +31,9 @@ public:
   std::string toString() const;
   int getTurn() const;
   char getPlayer() const;
-  std::vector<std::string> moves() const;
-  std::vector<std::string> movesShuffled() const;
-  std::vector<std::string> movesEvaluated() const;
+  std::vector<Move> moves() const;
+  std::vector<Move> movesShuffled() const;
+  std::vector<Move> movesEvaluated() const;
   bool isEnemy(char piece) const;
   bool isOwn(char piece) const;
   bool isNothing(char piece) const;
@@ -49,6 +50,7 @@ private:
   char board[RANKS][FILES];
   int turn;
   char player;
+  Movegen mgen; // Modular move generator
 };
 
 #endif 
