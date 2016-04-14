@@ -216,27 +216,39 @@ void Client::handle_json(cJSON* in, cJSON* out) {
   //chess_moves
   else if (strcmp(cJSON_GetObjectItem(in, "strFunction")->valuestring,
 		  "chess_moves") == 0) {
-    vector<string> ms = game.moves();
-    string moves = accumulate(ms.begin(), ms.end(), string(""));
-    cJSON_AddNumberToObject(out, "intOut", ms.size());
+    vector<Move> ms = game.moves();
+    vector<string> mstrs;
+    for(vector<Move>::iterator i = ms.begin(); i != ms.end(); ++i) {
+      mstrs.push_back(i->toString());
+    }
+    string moves = accumulate(mstrs.begin(), mstrs.end(), string(""));
+    cJSON_AddNumberToObject(out, "intOut", mstrs.size());
     cJSON_AddStringToObject(out, "strOut", moves.c_str());
   }
 
   //chess_movesShuffled
   else if (strcmp(cJSON_GetObjectItem(in, "strFunction")->valuestring,
 		  "chess_movesShuffled") == 0) {
-    vector<string> ms = game.movesShuffled();
-    string moves = accumulate(ms.begin(), ms.end(), string(""));
-    cJSON_AddNumberToObject(out, "intOut", ms.size());
+    vector<Move> ms = game.movesShuffled();
+    vector<string> mstrs;
+    for(vector<Move>::iterator i = ms.begin(); i != ms.end(); ++i) {
+      mstrs.push_back(i->toString());
+    }
+    string moves = accumulate(mstrs.begin(), mstrs.end(), string(""));
+    cJSON_AddNumberToObject(out, "intOut", mstrs.size());
     cJSON_AddStringToObject(out, "strOut", moves.c_str());
   }
 
   //chess_movesEvaluated
   else if (strcmp(cJSON_GetObjectItem(in, "strFunction")->valuestring,
 		  "chess_movesEvaluated") == 0) {
-    vector<string> ms = game.movesEvaluated();
-    string moves = accumulate(ms.begin(), ms.end(), string(""));
-    cJSON_AddNumberToObject(out, "intOut", ms.size());
+    vector<Move> ms = game.movesEvaluated();
+    vector<string> mstrs;
+    for(vector<Move>::iterator i = ms.begin(); i != ms.end(); ++i) {
+      mstrs.push_back(i->toString());
+    }
+    string moves = accumulate(mstrs.begin(), mstrs.end(), string(""));
+    cJSON_AddNumberToObject(out, "intOut", mstrs.size());
     cJSON_AddStringToObject(out, "strOut", moves.c_str());
   }
 

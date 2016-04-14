@@ -51,15 +51,15 @@ char Game::winner() const {
   return main_board.winner();
 }
 
-vector<string> Game::moves() const {
+vector<Move> Game::moves() const {
   return main_board.moves();
 }
 
-vector<string> Game::movesShuffled() const {
+vector<Move> Game::movesShuffled() const {
   return main_board.movesShuffled();
 }
 
-vector<string> Game::movesEvaluated() const {
+vector<Move> Game::movesEvaluated() const {
   return main_board.movesEvaluated();
 }
 
