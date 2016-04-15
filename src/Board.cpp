@@ -158,27 +158,27 @@ void Board::move(const Move& m) {
 
   // Do a sanity check! Does NOT verify that the move
   // was legal for the piece.
-  // if (!isValid(srank, sfile) ||
-  //      !isValid(frank, ffile) || 
-  //     !ownp(board[srank][sfile], player) ||
-  //     ownp(board[frank][ffile], player))
-  //   {
-  //   cout << "ERROR -- tried to make invalid move\n" 
-  // 	 << " Move: " << m.toString() << "\n"
-  // 	 << " Board state:\n" 
-  // 	 << repr() << endl;
-  //   cout << "The indices were: \n"
-  // 	 << " start rank: " << srank << "\n"
-  //     	 << " start file: " << sfile << "\n"
-  //     	 << " end rank: " << frank << "\n"
-  //     	 << " end file: " << ffile << "\n";
+  if (!isValid(srank, sfile) ||
+       !isValid(frank, ffile) || 
+      !ownp(board[srank][sfile], player) ||
+      ownp(board[frank][ffile], player))
+    {
+    cout << "ERROR -- tried to make invalid move\n" 
+  	 << " Move: " << m.toString() << "\n"
+  	 << " Board state:\n" 
+  	 << repr() << endl;
+    cout << "The indices were: \n"
+  	 << " start rank: " << srank << "\n"
+      	 << " start file: " << sfile << "\n"
+      	 << " end rank: " << frank << "\n"
+      	 << " end file: " << ffile << "\n";
 
-  //   cout << "start valid: " << isValid(srank, sfile) << "\n"
-  // 	 << "end valid: " << isValid(frank, ffile) << "\n"
-  // 	 << "start own: " << ownp(board[srank][sfile], player) << "\n"
-  //     	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
-  //   exit(1);
-  // }
+    cout << "start valid: " << isValid(srank, sfile) << "\n"
+  	 << "end valid: " << isValid(frank, ffile) << "\n"
+  	 << "start own: " << ownp(board[srank][sfile], player) << "\n"
+      	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
+    exit(1);
+  }
 
   cout << repr() << endl;
   // make the move
