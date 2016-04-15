@@ -15,30 +15,17 @@ using namespace std;
 int parse_board(const std::string b, int* newturn,
 		char* newplayer, char newboard[RANKS][FILES]) {
   vector<string> splits = split(b, '\n');
+
+  // set player and turn
   sscanf(splits[0].c_str(), "%d %c", newturn, newplayer);
-  for (int y = 0; y < RANKS; ++y) 
+
+  for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
       newboard[y][x] = splits[y+1][x];
     }
+  }
   
   return 0;
-}
-
-vector<string>& split(const string& s, char delim,
-		      vector<string>& elems) {
-  stringstream sstream(s);
-  string item;
-  while(getline(sstream, item, delim)) {
-    if(!item.empty())
-      elems.push_back(item);
-  }
-  return elems;
-}
-
-vector<string> split(const string& s, char delim) {
-  vector<string> elems;
-  split(s, delim, elems);
-  return elems;
 }
 
 void print_string_vec(const vector<string>& v) {

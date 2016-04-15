@@ -39,6 +39,7 @@ public:
   bool isNothing(char piece) const;
   int eval() const;
   void move(const std::string& m);
+  void move(const Move& m);
   void undo();
   std::string moveRandom();
   std::string moveGreedy();

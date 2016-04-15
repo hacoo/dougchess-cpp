@@ -132,7 +132,7 @@ void Movegen::insertPawnMoves(const char board[RANKS][FILES],
 
   if (player == 'B') {
     if((isValid(rank+1, file)) &&
-       (!ownp(board[rank+1][file], player)))
+       (emptyp(board[rank+1][file])))
       ms.push_back(Move(start, Square(rank+1, file)));
 
     // Diagonal capture moves
@@ -147,13 +147,13 @@ void Movegen::insertPawnMoves(const char board[RANKS][FILES],
   } else {
 
     if((isValid(rank-1, file)) &&
-       (!ownp(board[rank-1][file], player)))
+       (emptyp(board[rank-1][file])))
       ms.push_back(Move(start, Square(rank-1, file)));
 
     // Diagonal capture moves
     if((isValid(rank-1, file-1)) &&
        (enemyp(board[rank-1][file-1], player)))
-      ms.push_back(Move(start, Square(rank+1, file-1)));
+      ms.push_back(Move(start, Square(rank-1, file-1)));
 
     if((isValid(rank-1, file+1)) &&
        (enemyp(board[rank-1][file+1], player)))
@@ -225,7 +225,7 @@ void Movegen::insertRookMoves(const char board[RANKS][FILES],
     ms.push_back(Move(start, Square(r, f)));
     ++r;
   }
-  if (enemyp(board[r][f], player)) 
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
     ms.push_back(Move(start, Square(r, f)));
   
   // up 
@@ -234,9 +234,10 @@ void Movegen::insertRookMoves(const char board[RANKS][FILES],
     ms.push_back(Move(start, Square(r, f)));
     --r;
   }
-  if (enemyp(board[r][f], player)) 
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
     ms.push_back(Move(start, Square(r, f)));
 
+  
   // left
   r = rank;
   f = file-1;
@@ -244,16 +245,17 @@ void Movegen::insertRookMoves(const char board[RANKS][FILES],
     ms.push_back(Move(start, Square(r, f)));
     --f;
   }
-  if (enemyp(board[r][f], player)) 
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
     ms.push_back(Move(start, Square(r, f)));
-  
+
+
   // right
   f = file+1;
   while (isValid(r, f) && emptyp(board[r][f])) {
     ms.push_back(Move(start, Square(r, f)));
     ++f;
   }
-  if (enemyp(board[r][f], player)) 
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
     ms.push_back(Move(start, Square(r, f)));
 }
 

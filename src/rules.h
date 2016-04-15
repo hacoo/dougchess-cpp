@@ -10,39 +10,64 @@
 #ifndef RULES_H
 #define RULES_H
 #include <cstring>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+#include <cstdlib>
+
+
+inline std::vector<std::string>& _split(const std::string& s,
+					char delim,
+					std::vector<std::string>& elems) {
+  std::stringstream sstream(s);
+  std::string item;
+  while(getline(sstream, item, delim)) {
+    if(!item.empty())
+      elems.push_back(item);
+  }
+  return elems;
+}
+
+inline std::vector<std::string> split(const std::string& s, char delim) {
+  std::vector<std::string> elems;
+  _split(s, delim, elems);
+  return elems;
+}
+
 
 class SimpleScoreTable {
  public:
   SimpleScoreTable() {
-    scores[0]['k'] = -100000.0;
-    scores[0]['K'] = 100000.0;
-    scores[0]['q'] = -9.0;
-    scores[0]['Q'] = 9.0;
-    scores[0]['r'] = -5.0;
-    scores[0]['R'] = 5.0;
-    scores[1]['b'] = -3.0;
-    scores[1]['B'] = 3.0;
-    scores[0]['n'] = -3.0;
-    scores[0]['N'] = 3.0;
-    scores[0]['p'] = -1.0;
-    scores[0]['P'] = 1.0;
-    scores[0]['.'] = 0.0;
+    scores[0]['k'] = -100000;
+    scores[0]['K'] = 100000;
+    scores[0]['q'] = -9;
+    scores[0]['Q'] = 9;
+    scores[0]['r'] = -5;
+    scores[0]['R'] = 5;
+    scores[0]['b'] = -3;
+    scores[0]['B'] = 3;
+    scores[0]['n'] = -3;
+    scores[0]['N'] = 3;
+    scores[0]['p'] = -1;
+    scores[0]['P'] = 1;
+    scores[0]['.'] = 0;
 
-    scores[1]['k'] = 100000.0;
-    scores[1]['K'] = -100000.0;
-    scores[1]['q'] = 9.0;
-    scores[1]['Q'] = -9.0;
-    scores[1]['r'] = 5.0;
-    scores[1]['R'] = -5.0;
-    scores[1]['b'] = 3.0;
-    scores[1]['B'] = -3.0;
-    scores[1]['n'] = 3.0;
-    scores[1]['N'] = -3.0;
-    scores[1]['p'] = 1.0;
-    scores[1]['P'] = -1.0;
-    scores[1]['.'] = 0.0;
+    scores[1]['k'] = 100000;
+    scores[1]['K'] = -100000;
+    scores[1]['q'] = 9;
+    scores[1]['Q'] = -9;
+    scores[1]['r'] = 5;
+    scores[1]['R'] = -5;
+    scores[1]['b'] = 3;
+    scores[1]['B'] = -3;
+    scores[1]['n'] = 3;
+    scores[1]['N'] = -3;
+    scores[1]['p'] = 1;
+    scores[1]['P'] = -1;
+    scores[1]['.'] = 0;
   }
-  float scores[2][128];
+  int scores[2][128];
 };
 
 // Scoring array. Acts as a global lookup table assosciating a piece
@@ -62,35 +87,61 @@ static SimpleScoreTable simple_score_table;
 
 
 
-// Represents a particular board square
+// Represents a particular board square.
+// This is a lightweight data-container with PUBLIC data.
 class Square {
  public:
+  Square() : rank(0), file(0) {}
   Square(int rank, int file) : rank(rank), file(file) {}
+
   Square(const Square& other) : rank(other.rank), file(other.file) {}
+
+  Square(const std::string& s) {
+    char f = s[0];
+    char r = s[1];
+    rank = -((int) r) + 48 + RANKS;
+    file = (int) f - 97;
+  }
+  
   ~Square() {}
-  std::string toString() {
+
+  std::string toString() const {
     char temp[4] = { (char) fileLookup(file),
 		     (char) rankLookup(rank),
 		     '\0' };
     return std::string(temp);
   }
 
- private:
+  int getRank() { return rank; }
+  int getFile() { return file; }
+
   int rank;
   int file;
 };
 
 
-// Represents a move from one square to another
+// Represents a move from one square to another.
+// This is a lightweight data-container with PUBLIC data.
 class Move {
  public:
   Move(Square start, Square finish) : start(start), finish(finish) {}
+
+  Move (const Move& other) : start(other.start),
+    finish(other.finish) {}
+
+  // construct from string
+  Move(const std::string& m){
+    std::vector<std::string> splits = split(m, '-');
+    start = Square(splits[0]);
+    finish = Square(splits[1]);
+  }
+
   ~Move() {}
-  std::string toString() {
+
+  std::string toString() const {
     return start.toString() + "-" + finish.toString() + "\n";
   }
-  
- private:
+
   Square start;
   Square finish;
 };

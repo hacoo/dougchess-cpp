@@ -140,6 +140,71 @@ int Board::eval() const {
 
 // Make the requested move, will modify board state.
 void Board::move(const string& m) {
+
+  move(Move(m));
+  return;
+}
+
+// Make the requested move, will modify board state.
+// Also performs sanity check and will crash on an 
+// invalid mode.
+void Board::move(const Move& m) {
+  
+  cout << "MAKING MOVE: " << m.toString();
+  int srank = m.start.rank;
+  int frank = m.finish.rank;
+  int sfile = m.start.file;
+  int ffile = m.finish.file;
+
+  // Do a sanity check! Does NOT verify that the move
+  // was legal for the piece.
+  // if (!isValid(srank, sfile) ||
+  //      !isValid(frank, ffile) || 
+  //     !ownp(board[srank][sfile], player) ||
+  //     ownp(board[frank][ffile], player))
+  //   {
+  //   cout << "ERROR -- tried to make invalid move\n" 
+  // 	 << " Move: " << m.toString() << "\n"
+  // 	 << " Board state:\n" 
+  // 	 << repr() << endl;
+  //   cout << "The indices were: \n"
+  // 	 << " start rank: " << srank << "\n"
+  //     	 << " start file: " << sfile << "\n"
+  //     	 << " end rank: " << frank << "\n"
+  //     	 << " end file: " << ffile << "\n";
+
+  //   cout << "start valid: " << isValid(srank, sfile) << "\n"
+  // 	 << "end valid: " << isValid(frank, ffile) << "\n"
+  // 	 << "start own: " << ownp(board[srank][sfile], player) << "\n"
+  //     	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
+  //   exit(1);
+  // }
+
+  cout << repr() << endl;
+  // make the move
+  char piece = board[srank][sfile];
+  // handle queen promotion
+  if ((piece == 'p') && (frank == RANKS-1)) {
+    board[frank][ffile] = 'q';
+  }
+  else if ((piece == 'P') && (frank == 0)) {
+    board[frank][ffile] = 'Q';
+  }
+  else {
+    board[frank][ffile] = piece;
+  }
+
+  board[srank][sfile] = '.';
+
+  // switch who is playing
+  if (player == 'W') {
+    player = 'B';
+  } else {
+    player = 'W';
+    ++turn; // increment every other turn
+  }
+  
+  cout << repr() << endl;
   return;
 }
 
