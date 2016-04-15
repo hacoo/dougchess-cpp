@@ -95,7 +95,7 @@ void Client::main_loop() {
   cJSON* jsonIn;
   cJSON* jsonOut;
   char charJson[1024] = { };
-  char* charToSend;
+  char* charToSend = NULL;
 
   while (running) {
     jsonIn  = NULL;
@@ -107,7 +107,7 @@ void Client::main_loop() {
       return;
     }
 
-    printf("Received: %s\n", charJson);
+    //printf("Received: %s\n", charJson);
 
     jsonIn = cJSON_Parse(charJson);
 
@@ -115,7 +115,7 @@ void Client::main_loop() {
 
     charToSend = cJSON_PrintUnformatted(jsonOut);
 
-    printf("Sending: %s\n", charToSend);
+    //printf("Sending: %s\n", charToSend);
     
     if (zmq_send(socketHandle, charToSend, 
 		 strlen(charToSend), 0) == -1) {
@@ -123,8 +123,10 @@ void Client::main_loop() {
       printf("zeromq: %s\n", zmq_strerror(zmq_errno()));
     }
 
-    if(charToSend)
-      delete charToSend;
+    if(charToSend) {
+      free(charToSend);
+      charToSend = NULL;
+    }
 
     if (jsonIn)
       cJSON_Delete(jsonIn);

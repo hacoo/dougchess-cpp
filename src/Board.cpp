@@ -180,6 +180,10 @@ void Board::move(const Move& m) {
 
   // make the move
   char piece = board[srank][sfile];
+  
+  // catch undo piece before it's overwritten'
+  undo_piece.push(board[frank][ffile]);
+
   // handle queen promotion
   if ((piece == 'p') && (frank == RANKS-1)) {
     board[frank][ffile] = 'q';
@@ -201,11 +205,72 @@ void Board::move(const Move& m) {
     ++turn; // increment every other turn
   }
 
+  // set the undo move
+  undo_move.push(Move(m.finish, m.start));
+ 
   return;
 }
 
 // Undo the last move. Will modify board state
 void Board::undo() {
+  
+  if (undo_move.empty()) {
+    cout << "ERROR -- no move to undo" << endl;
+    return;
+  }
+
+  if (undo_piece.empty()) {
+    cout << "ERROR -- no piece to undo. This should not happen!" << endl;
+    exit(1);
+    return;
+  }
+  
+  Move m = undo_move.top();
+  char p = undo_piece.top();
+  undo_move.pop();
+  undo_piece.pop();
+
+  int srank = m.start.rank;
+  int frank = m.finish.rank;
+  int sfile = m.start.file;
+  int ffile = m.finish.file;
+
+  // Do a sanity check! Does NOT verify that the move
+  // was legal for the piece.
+  if (!isValid(srank, sfile) ||
+       !isValid(frank, ffile) || 
+      !enemyp(board[srank][sfile], player) ||
+      !emptyp(board[frank][ffile]))
+    {
+    cout << "ERROR -- tried to make invalid move\n" 
+  	 << " Move: " << m.toString() << "\n"
+  	 << " Board state:\n" 
+  	 << repr() << endl;
+    cout << "The indices were: \n"
+  	 << " start rank: " << srank << "\n"
+      	 << " start file: " << sfile << "\n"
+      	 << " end rank: " << frank << "\n"
+      	 << " end file: " << ffile << "\n";
+    cout << "start valid: " << isValid(srank, sfile) << "\n"
+  	 << "end valid: " << isValid(frank, ffile) << "\n"
+  	 << "start own: " << ownp(board[srank][sfile], player) << "\n"
+      	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
+    exit(1);
+  }
+  
+  // move the piece back
+  board[frank][ffile] = board[srank][sfile];
+  // restore the previous piece
+  board[srank][sfile] = p;
+  
+  // switch who is playing
+  if (player == 'B') {
+    player = 'W';
+  } else {
+    player = 'B';
+    --turn; // decrement every other turn
+  }
+
   return;
 }
 

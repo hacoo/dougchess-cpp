@@ -424,8 +424,6 @@ void Movegen::insertBishopMoves(const char board[RANKS][FILES],
 
   if(isValid(rank, file+1) && emptyp(board[rank][file+1]))
     ms.push_back(Move(start, Square(rank, file+1)));
-
-
 }
 
 

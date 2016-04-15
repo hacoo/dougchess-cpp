@@ -15,6 +15,7 @@
 #include <sstream>
 #include <vector>
 #include <numeric>
+#include <stack>
 #include "rules.h"
 #include "utility.h"
 #include "Eval.h"
@@ -52,6 +53,9 @@ private:
   int turn;
   char player;
   Movegen mgen; // Modular move generator
+  std::stack<Move> undo_move; // last undo move
+  std::stack<char> undo_piece; // piece present under undo space
+
 };
 
 #endif 

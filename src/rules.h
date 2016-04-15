@@ -124,12 +124,13 @@ class Square {
 // This is a lightweight data-container with PUBLIC data.
 class Move {
  public:
+  Move() {}
   Move(Square start, Square finish) : start(start), finish(finish) {}
 
   Move (const Move& other) : start(other.start),
     finish(other.finish) {}
 
-  // construct from string
+  // construct from stringvq
   Move(const std::string& m){
     std::vector<std::string> splits = split(m, '-');
     start = Square(splits[0]);
@@ -137,6 +138,21 @@ class Move {
   }
 
   ~Move() {}
+  
+  void clone(const Move& other) {
+    start.rank = other.start.rank;
+    start.file = other.start.file;
+    finish.rank = other.finish.rank;
+    finish.file = other.finish.file;
+  }
+
+  // Turn this move into the reverse of other
+  void reverse(const Move& other) {
+    start.rank = other.finish.rank;
+    start.file = other.finish.file;
+    finish.rank = other.start.rank;
+    finish.file = other.start.file;
+  }
 
   std::string toString() const {
     return start.toString() + "-" + finish.toString() + "\n";
