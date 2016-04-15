@@ -150,7 +150,6 @@ void Board::move(const string& m) {
 // invalid mode.
 void Board::move(const Move& m) {
   
-  cout << "MAKING MOVE: " << m.toString();
   int srank = m.start.rank;
   int frank = m.finish.rank;
   int sfile = m.start.file;
@@ -172,7 +171,6 @@ void Board::move(const Move& m) {
       	 << " start file: " << sfile << "\n"
       	 << " end rank: " << frank << "\n"
       	 << " end file: " << ffile << "\n";
-
     cout << "start valid: " << isValid(srank, sfile) << "\n"
   	 << "end valid: " << isValid(frank, ffile) << "\n"
   	 << "start own: " << ownp(board[srank][sfile], player) << "\n"
@@ -180,7 +178,6 @@ void Board::move(const Move& m) {
     exit(1);
   }
 
-  cout << repr() << endl;
   // make the move
   char piece = board[srank][sfile];
   // handle queen promotion
@@ -203,8 +200,7 @@ void Board::move(const Move& m) {
     player = 'W';
     ++turn; // increment every other turn
   }
-  
-  cout << repr() << endl;
+
   return;
 }
 

@@ -55,6 +55,20 @@ class Movegen {
 			      int file,
 			      std::vector<Move>& ms);
 
+  static void insertQueenMoves(const char board[RANKS][FILES],
+			       char player,
+			       int rank,
+			       int file,
+			       std::vector<Move>& ms);
+
+  static void insertBishopMoves(const char board[RANKS][FILES],
+				char player,
+				int rank,
+				int file,
+				std::vector<Move>& ms);
+
+
+
 
 
   static void sanityCheck(const char board[RANKS][FILES],

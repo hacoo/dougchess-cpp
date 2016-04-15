@@ -34,41 +34,36 @@ void Movegen::insertPieceMove(const char board[RANKS][FILES],
 			      int rank,
 			      int file,
 			      vector<Move>& ms) {
-  cout << "Generating: " << rank << " " << file << endl;
   switch(board[rank][file]) {
     
   case 'k' : insertKingMoves(board, player, rank, file, ms);
-             cout << "Generating king moves" << endl;
 	     break;
   case 'K' : insertKingMoves(board, player, rank, file, ms);
-             cout << "Generating king moves" << endl;
 	     break;
-  case 'q' : break;
-  case 'Q' : break;
+  case 'q' : insertQueenMoves(board, player, rank, file, ms);
+	     break;
+  case 'Q' : insertQueenMoves(board, player, rank, file, ms);
+	     break;
   case 'r' : insertRookMoves(board, player, rank, file, ms);
-             cout << "Generating rook moves" << endl;
 	     break;
   case 'R' : insertRookMoves(board, player, rank, file, ms);
-             cout << "Generating rook moves" << endl;
 	     break;
-
   case 'n' : insertKnightMoves(board, player, rank, file, ms);
-             cout << "Generating knight moves" << endl;
 	     break;
   case 'N' : insertKnightMoves(board, player, rank, file, ms);
-             cout << "Generating knight moves" << endl;
 	     break;
-  case 'b' : break;
-  case 'B' : break;
+  case 'b' : insertBishopMoves(board, player, rank, file, ms);
+	     break;
+  case 'B' : insertBishopMoves(board, player, rank, file, ms);
+	     break;
+
   case 'p' : insertPawnMoves(board, player, rank, file, ms);
-             cout << "Generating pawn moves" << endl;
 	     break;
   case 'P' : insertPawnMoves(board, player, rank, file, ms);
-             cout << "Generating pawn moves" << endl;
 	     break;
   case '.' : break;
   default  : {
-    cout << "ERROR - invalid piece " << board[rank][file] << endl;
+    cout << "ERROR - moves requested for invalid piece " << board[rank][file] << endl;
     exit(1);
   }   
   }
@@ -257,6 +252,180 @@ void Movegen::insertRookMoves(const char board[RANKS][FILES],
   }
   if (isValid(r, f) && enemyp(board[r][f], player)) 
     ms.push_back(Move(start, Square(r, f)));
+}
+
+
+void Movegen::insertQueenMoves(const char board[RANKS][FILES],
+			       char player,
+			       int rank,
+			       int file,
+			       vector<Move>& ms) {
+
+  
+  sanityCheck(board, player, 'q', rank, file);
+  
+  Square start(rank, file);
+  int r;
+  int f;
+
+  // down
+  r = rank+1;
+  f = file;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    ++r;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+  
+  // up 
+  r = rank-1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    --r;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  
+  // left
+  r = rank;
+  f = file-1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    --f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+
+  // right
+  f = file+1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    ++f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // up-right
+  r = rank-1;
+  f = file+1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    --r;
+    ++f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // up-left
+  r = rank-1;
+  f = file-1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    --r;
+    --f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // down-right
+  r = rank+1;
+  f = file+1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    ++r;
+    ++f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // down-left
+  r = rank+1;
+  f = file-1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    ++r;
+    --f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+}
+
+
+
+void Movegen::insertBishopMoves(const char board[RANKS][FILES],
+				char player,
+				int rank,
+				int file,
+			      vector<Move>& ms) {
+
+  
+  sanityCheck(board, player, 'b', rank, file);
+  
+  Square start(rank, file);
+  int r;
+  int f;
+
+  // up-right
+  r = rank-1;
+  f = file+1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    --r;
+    ++f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // up-left
+  r = rank-1;
+  f = file-1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    --r;
+    --f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // down-right
+  r = rank+1;
+  f = file+1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    ++r;
+    ++f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+
+  // down-left
+  r = rank+1;
+  f = file-1;
+  while (isValid(r, f) && emptyp(board[r][f])) {
+    ms.push_back(Move(start, Square(r, f)));
+    ++r;
+    --f;
+  }
+  if (isValid(r, f) && enemyp(board[r][f], player)) 
+    ms.push_back(Move(start, Square(r, f)));
+  
+  // up/down/left/right
+  if(isValid(rank-1, file) && emptyp(board[rank-1][file]))
+    ms.push_back(Move(start, Square(rank-1, file)));
+
+  if(isValid(rank+1, file) && emptyp(board[rank+1][file]))
+    ms.push_back(Move(start, Square(rank+1, file)));
+
+  if(isValid(rank, file-1) && emptyp(board[rank][file-1]))
+    ms.push_back(Move(start, Square(rank, file-1)));
+
+  if(isValid(rank, file+1) && emptyp(board[rank][file+1]))
+    ms.push_back(Move(start, Square(rank, file+1)));
+
+
 }
 
 
