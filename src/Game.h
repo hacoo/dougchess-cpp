@@ -28,7 +28,7 @@ public:
   char winner() const;
   std::vector<Move> moves() const;
   std::vector<Move> movesShuffled() const;
-  std::vector<Move> movesEvaluated() const;
+  std::vector<Move> movesEvaluated();
   bool isEnemy(char piece) const;
   bool isOwn(char piece) const;
   bool isNothing(char piece) const;

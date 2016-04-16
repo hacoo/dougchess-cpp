@@ -17,11 +17,15 @@ Board::Board() {
       for (int x = 0; x < FILES; ++x)
       board[y][x] = '.';
   }
+  
+  engine = new default_random_engine(time(NULL));
+  
   turn = 0;
   player = 'W';
 }
 
 Board::~Board() {
+  delete engine;
 }
 
 
@@ -87,6 +91,14 @@ void Board::reset() {
       board[y][x] = b[y][x];
     }
   }
+
+  // clear undo stacks
+  while (!undo_move.empty())
+    undo_move.pop();
+  while (!undo_piece.empty())
+    undo_piece.pop();
+
+  
 }
 
 // Set the board to the contents of b.
@@ -102,15 +114,21 @@ vector<Move> Board::moves() const {
   return ms;
 }
 
-
 // Return moves in random order
 vector<Move> Board::movesShuffled() const {
-  return moves();
+  vector<Move> ms;
+  mgen.generateMoves(board, player, ms);
+  shuffle(begin(ms), end(ms), *engine);
+  return ms;
 }
 
 // Return moves in order of evaluation
-vector<Move> Board::movesEvaluated() const {
-  return moves();
+vector<Move> Board::movesEvaluated() {
+  vector<Move> ms;
+  mgen.generateMoves(board, player, ms);
+  sort(ms.begin(), ms.end(), moveCompare(this));
+  
+  return ms;
 }
 
 char Board::getPlayer() const {
@@ -162,7 +180,7 @@ void Board::move(const Move& m) {
       !ownp(board[srank][sfile], player) ||
       ownp(board[frank][ffile], player))
     {
-    cout << "ERROR -- tried to make invalid move\n" 
+    cout << "ERROR -- tried to make invalid undo\n" 
   	 << " Move: " << m.toString() << "\n"
   	 << " Board state:\n" 
   	 << repr() << endl;

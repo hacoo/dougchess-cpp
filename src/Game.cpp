@@ -59,7 +59,7 @@ vector<Move> Game::movesShuffled() const {
   return main_board.movesShuffled();
 }
 
-vector<Move> Game::movesEvaluated() const {
+vector<Move> Game::movesEvaluated() {
   return main_board.movesEvaluated();
 }
 
