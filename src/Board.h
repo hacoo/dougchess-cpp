@@ -57,7 +57,8 @@ private:
   char board[RANKS][FILES];
   int turn;
   char player;
-  Movegen mgen; // Modular move generator
+  Movegen mgen; // Modular move generator 
+  Negamax negamax; // Negamax player
   std::stack<Move> undo_move; // last undo move
   std::stack<char> undo_piece; // piece present under undo space
   std::default_random_engine* engine;

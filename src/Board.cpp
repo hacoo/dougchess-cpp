@@ -126,8 +126,9 @@ vector<Move> Board::movesShuffled() const {
 vector<Move> Board::movesEvaluated() {
   vector<Move> ms;
   mgen.generateMoves(board, player, ms);
+  // shuffle to randomize 'equal' moves
+  shuffle(begin(ms), end(ms), *engine); 
   sort(ms.begin(), ms.end(), moveCompare(this));
-  
   return ms;
 }
 
@@ -295,13 +296,19 @@ void Board::undo() {
 // Make a random move, return the move made.
 // Will modify the board state.
 string Board::moveRandom() {
-  return string("a5-a4\n");
+  vector<Move> ms = movesShuffled();
+  move(ms[0]);
+  return ms[0].toString();
 }
 
 // Make a greedy move, return the move made.
 // Will modify the board state.
+// Makes the move that will result in the highest
+// board evaluation, one move ahead.
 string Board::moveGreedy() {
-  return string("a5-a4\n");
+  vector<Move> ms = movesEvaluated();
+  move(ms[0]);
+  return ms[0].toString();
 }
 
 // Make a negamax move, return the move made.
