@@ -22,8 +22,9 @@
 #include <chrono>
 #include "rules.h"
 #include "utility.h"
-#include "Eval.h"
+#include "SimpleEval.h"
 #include "Movegen.h"
+#include "Negamax.h"
 
 
 class Board {
@@ -57,8 +58,10 @@ private:
   char board[RANKS][FILES];
   int turn;
   char player;
+  SimpleEval evaluator;
   Movegen mgen; // Modular move generator 
   Negamax negamax; // Negamax player
+  
   std::stack<Move> undo_move; // last undo move
   std::stack<char> undo_piece; // piece present under undo space
   std::default_random_engine* engine;

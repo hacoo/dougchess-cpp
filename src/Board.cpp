@@ -153,7 +153,7 @@ bool Board::isNothing(char piece) const {
 }
 
 int Board::eval() const {
-  return Eval::score_simple(board, player);
+  return evaluator.eval(board, player);
 }
 
 
