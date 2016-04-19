@@ -282,13 +282,21 @@ void Client::handle_json(cJSON* in, cJSON* out) {
   //chess_moveNegamax
   else if (strcmp(cJSON_GetObjectItem(in, "strFunction")->valuestring,
 		  "chess_moveNegamax") == 0) {
-    cJSON_AddStringToObject(out, "strOut", game.moveNegamax().c_str());
+    int depth = cJSON_GetObjectItem(in, "intDepth")->valueint;
+    int duration = cJSON_GetObjectItem(in, "intDuration")->valueint;
+    cJSON_AddStringToObject(out, 
+			    "strOut", 
+			    game.moveNegamax(depth, duration).c_str());
   }
 
   //chess_moveAlphabeta
   else if (strcmp(cJSON_GetObjectItem(in, "strFunction")->valuestring,
 		  "chess_moveAlphabeta") == 0) {
-    cJSON_AddStringToObject(out, "strOut", game.moveAlphabeta().c_str());
+    int depth = cJSON_GetObjectItem(in, "intDepth")->valueint;
+    int duration = cJSON_GetObjectItem(in, "intDuration")->valueint;
+    cJSON_AddStringToObject(out, 
+			    "strOut",
+			    game.moveAlphabeta(depth, duration).c_str());
   }
 }
 

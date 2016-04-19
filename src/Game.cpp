@@ -104,12 +104,12 @@ string Game::moveGreedy() {
 
 // Make a negamax move, return the move made.
 // Will modify the board state.
-string Game::moveNegamax() {
-  return main_board.moveNegamax();
+string Game::moveNegamax(int depth, int duration) {
+  return main_board.moveNegamax(depth, duration);
 }
 
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
-string Game::moveAlphabeta() {
-  return main_board.moveAlphabeta();
+string Game::moveAlphabeta(int depth, int duration) {
+  return main_board.moveAlphabeta(depth, duration);
 }

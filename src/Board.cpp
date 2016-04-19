@@ -17,13 +17,25 @@ Board::Board() {
       for (int x = 0; x < FILES; ++x)
       board[y][x] = '.';
   }
-  
+
   engine = new default_random_engine(time(NULL));
   
   turn = 0;
   player = 'W';
 }
 
+// Copy constructor -- does NOT copy undo history
+Board::Board(const Board& other) 
+  : turn(other.turn), 
+    player(other.player) {
+  for (int y = 0; y < RANKS; ++y) {
+    for (int x = 0; x < FILES; ++x) {
+      board[y][x] = other.board[y][x];
+    }
+  }
+  engine = new default_random_engine(time(NULL));
+}
+  
 Board::~Board() {
   delete engine;
 }
@@ -313,13 +325,15 @@ string Board::moveGreedy() {
 
 // Make a negamax move, return the move made.
 // Will modify the board state.
-string Board::moveNegamax() {
-  return string("a5-a4\n");
+string Board::moveNegamax(int depth, int duration) {
+  Move m = negamax_move(*this, depth);
+  move(m);
+  return m.toString();
 }
 
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
-string Board::moveAlphabeta() {
+string Board::moveAlphabeta(int depth, int duration) {
   return string("a5-a4\n");
 }
 

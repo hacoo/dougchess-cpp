@@ -37,8 +37,8 @@ public:
   void undo();
   std::string moveRandom();
   std::string moveGreedy();
-  std::string moveNegamax();
-  std::string moveAlphabeta();
+  std::string moveNegamax(int depth, int duration);
+  std::string moveAlphabeta(int depth, int duration);
 
 private:
   Board main_board; // The current game board

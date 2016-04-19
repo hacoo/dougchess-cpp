@@ -15,6 +15,7 @@
 #include <time.h>
 #include "rules.h"
 
+
 class SimpleScoreTable {
  public:
   SimpleScoreTable() {
@@ -74,3 +75,4 @@ class SimpleEval {
 
 
 #endif
+

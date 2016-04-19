@@ -16,6 +16,7 @@
 #include <iostream>
 #include <cstdlib>
 
+#define INFINITY 100000000
 
 inline std::vector<std::string>& _split(const std::string& s,
 					char delim,
@@ -24,7 +25,7 @@ inline std::vector<std::string>& _split(const std::string& s,
   std::string item;
   while(getline(sstream, item, delim)) {
     if(!item.empty())
-      elems.push_back(item);
+      elems.push_back(item); 
   }
   return elems;
 }
@@ -35,44 +36,6 @@ inline std::vector<std::string> split(const std::string& s, char delim) {
   return elems;
 }
 
-
-class SimpleScoreTable {
- public:
-  SimpleScoreTable() {
-    scores[0]['k'] = -100000;
-    scores[0]['K'] = 100000;
-    scores[0]['q'] = -9;
-    scores[0]['Q'] = 9;
-    scores[0]['r'] = -5;
-    scores[0]['R'] = 5;
-    scores[0]['b'] = -3;
-    scores[0]['B'] = 3;
-    scores[0]['n'] = -3;
-    scores[0]['N'] = 3;
-    scores[0]['p'] = -1;
-    scores[0]['P'] = 1;
-    scores[0]['.'] = 0;
-
-    scores[1]['k'] = 100000;
-    scores[1]['K'] = -100000;
-    scores[1]['q'] = 9;
-    scores[1]['Q'] = -9;
-    scores[1]['r'] = 5;
-    scores[1]['R'] = -5;
-    scores[1]['b'] = 3;
-    scores[1]['B'] = -3;
-    scores[1]['n'] = 3;
-    scores[1]['N'] = -3;
-    scores[1]['p'] = 1;
-    scores[1]['P'] = -1;
-    scores[1]['.'] = 0;
-  }
-  int scores[2][128];
-};
-
-// Scoring array. Acts as a global lookup table assosciating a piece
-// to a score.
-static SimpleScoreTable simple_score_table;
 
 #define RANKS 6
 #define FILES 5
@@ -163,6 +126,17 @@ class Move {
 };
 
 
+// Simple container class for holding both a 
+// move and the score that results. 
+class ScoredMove {
+ public: 
+  ScoredMove(): score(-INFINITY) {}
+  ~ScoredMove() {}
+  ScoredMove(const Move& m, int s) : move(m), score(s) {}
+  
+  Move move;
+  int score;
+};
 
 
 #endif

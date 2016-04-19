@@ -9,6 +9,8 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+class Board;
+
 #include <string>
 #include <stdio.h>
 #include <cstring>
@@ -24,7 +26,8 @@
 #include "utility.h"
 #include "SimpleEval.h"
 #include "Movegen.h"
-#include "Negamax.h"
+#include "negamax.h"
+
 
 
 class Board {
@@ -32,6 +35,7 @@ class Board {
 public:
   Board();
   ~Board();
+  Board(const Board& other);
   void reset();
   char winner() const;
   void boardSet(const std::string& b);
@@ -50,8 +54,8 @@ public:
   void undo();
   std::string moveRandom();
   std::string moveGreedy();
-  std::string moveNegamax();
-  std::string moveAlphabeta();
+  std::string moveNegamax(int depth, int duration);
+  std::string moveAlphabeta(int depth, int duration);
   std::string repr() const;
 
 private:
@@ -60,7 +64,6 @@ private:
   char player;
   SimpleEval evaluator;
   Movegen mgen; // Modular move generator 
-  Negamax negamax; // Negamax player
   
   std::stack<Move> undo_move; // last undo move
   std::stack<char> undo_piece; // piece present under undo space
