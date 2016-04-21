@@ -15,8 +15,9 @@
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <gperftools/profiler.h>
 
-#define INFINITY 100000000
+#define CHESSMAX 100000000
 
 inline std::vector<std::string>& _split(const std::string& s,
 					char delim,
@@ -130,7 +131,7 @@ class Move {
 // move and the score that results. 
 class ScoredMove {
  public: 
-  ScoredMove(): score(-INFINITY) {}
+  ScoredMove(): score(-CHESSMAX) {}
   ~ScoredMove() {}
   ScoredMove(const Move& m, int s) : move(m), score(s) {}
   

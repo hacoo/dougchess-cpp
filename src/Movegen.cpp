@@ -56,7 +56,6 @@ void Movegen::insertPieceMove(const char board[RANKS][FILES],
 	     break;
   case 'B' : insertBishopMoves(board, player, rank, file, ms);
 	     break;
-
   case 'p' : insertPawnMoves(board, player, rank, file, ms);
 	     break;
   case 'P' : insertPawnMoves(board, player, rank, file, ms);

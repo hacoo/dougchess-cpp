@@ -27,6 +27,7 @@ class Board;
 #include "SimpleEval.h"
 #include "Movegen.h"
 #include "negamax.h"
+#include "alphabeta.h"
 
 
 

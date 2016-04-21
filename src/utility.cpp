@@ -43,11 +43,14 @@ string board_to_string(const char board[RANKS][FILES]) {
   stringstream sstream;
   
   for (int y = 0; y < RANKS; ++y) {
+    sstream << 6-y << " ";
     for (int x = 0; x < FILES; ++x) {
-      sstream << board[y][x];
+      sstream << board[y][x] << " ";
     }
     sstream << "\n";
   }
+  sstream << "  a b c d e\n";
+  
   return sstream.str();
 }
 

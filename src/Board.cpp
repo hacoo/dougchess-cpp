@@ -334,12 +334,30 @@ string Board::moveNegamax(int depth, int duration) {
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
-  return string("a5-a4\n");
+  //ProfilerStart("alphabeta.log");
+  Move m = alphabeta_move(*this, depth);
+  Move nega = negamax_move(*this, depth);
+					   
+  cout << repr() << endl;
+
+  move(m);
+  //ProfilerStop();
+  
+  cout << repr() << endl;
+
+  cout << "Returning: " << m.toString() << endl;
+
+  cout << "Negamax: " << nega.toString() << endl;
+  return m.toString();
 }
 
 // Make string representation of the board
 string Board::repr() const {
   ostringstream os;
-  os << turn << " " << player << "\n" << board_to_string(board);
+  os << "  " << turn << " " << player << "\n" 
+     << board_to_string(board) << "\n"
+     << "  Eval:   " << eval() << "\n"
+     << "  Winner: " << winner() << "\n";
+    
   return os.str();
 }
