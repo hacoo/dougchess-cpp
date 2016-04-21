@@ -15,7 +15,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
-#include <gperftools/profiler.h>
+//#include <gperftools/profiler.h>
 
 #define CHESSMAX 100000000
 
