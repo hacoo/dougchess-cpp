@@ -64,10 +64,11 @@ private:
   int turn;
   char player;
   SimpleEval evaluator;
-  Movegen mgen; // Modular move generator 
+  Movegen mgen; // Modular move generator
   
   std::stack<Move> undo_move; // last undo move
   std::stack<char> undo_piece; // piece present under undo space
+  std::vector<char> pawn_promoted; // track whether a pawn promotion occured
   std::default_random_engine* engine;
 
   // Functor for move comparison

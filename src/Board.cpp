@@ -93,11 +93,19 @@ void Board::reset() {
   turn = 1;
   player = 'W';
   char b [RANKS][FILES] = {{'k', 'q', 'b', 'n', 'r'},
-			   {'p', 'p', 'p', 'p', 'p'},
-			   {'.', '.', '.', '.', '.'},
-			   {'.', '.', '.', '.', '.'},
-			   {'P', 'P', 'P', 'P', 'P'},
-			   {'R', 'N', 'B', 'Q', 'K'}};
+   			   {'p', 'p', 'p', 'p', 'p'},
+  			   {'.', '.', '.', '.', '.'},
+  			   {'.', '.', '.', '.', '.'},
+  			   {'P', 'P', 'P', 'P', 'P'},
+  			   {'R', 'N', 'B', 'Q', 'K'}};
+  // char b [RANKS][FILES] = {{'.', '.', '.', '.', '.'},
+  //  			   {'.', 'P', '.', '.', '.'},
+  // 			   {'.', '.', 'p', '.', '.'},
+  // 			   {'.', '.', '.', 'P', '.'},
+  // 			   {'.', 'p', '.', 'k', 'K'},
+  // 			   {'.', '.', '.', '.', '.'}};
+
+  
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
       board[y][x] = b[y][x];
@@ -109,9 +117,8 @@ void Board::reset() {
     undo_move.pop();
   while (!undo_piece.empty())
     undo_piece.pop();
-
-  
-}
+  pawn_promoted.clear();
+ }
 
 // Set the board to the contents of b.
 void Board::boardSet(const string& b) {
@@ -208,21 +215,22 @@ void Board::move(const Move& m) {
       	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
     exit(1);
   }
-
-  // make the move
-  char piece = board[srank][sfile];
   
   // catch undo piece before it's overwritten'
+  char piece = board[srank][sfile];
   undo_piece.push(board[frank][ffile]);
 
-  // handle queen promotion
+  // Make the move
   if ((piece == 'p') && (frank == RANKS-1)) {
+    pawn_promoted.push_back('T');
     board[frank][ffile] = 'q';
   }
   else if ((piece == 'P') && (frank == 0)) {
+    pawn_promoted.push_back('T');
     board[frank][ffile] = 'Q';
   }
   else {
+    pawn_promoted.push_back('F');
     board[frank][ffile] = piece;
   }
 
@@ -258,8 +266,10 @@ void Board::undo() {
   
   Move m = undo_move.top();
   char p = undo_piece.top();
+  char promotion = pawn_promoted.back();
   undo_move.pop();
   undo_piece.pop();
+  pawn_promoted.pop_back();
 
   int srank = m.start.rank;
   int frank = m.finish.rank;
@@ -269,7 +279,7 @@ void Board::undo() {
   // Do a sanity check! Does NOT verify that the move
   // was legal for the piece.
   if (!isValid(srank, sfile) ||
-       !isValid(frank, ffile) || 
+      !isValid(frank, ffile) || 
       !enemyp(board[srank][sfile], player) ||
       !emptyp(board[frank][ffile]))
     {
@@ -287,6 +297,14 @@ void Board::undo() {
   	 << "start own: " << ownp(board[srank][sfile], player) << "\n"
       	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
     exit(1);
+  }
+
+  // Check for pawn promotion
+  if (promotion == 'T') {
+    if (player == 'B')
+      board[srank][sfile] = 'P';
+    else
+      board[srank][sfile] = 'p';
   }
   
   // move the piece back
@@ -336,18 +354,15 @@ string Board::moveNegamax(int depth, int duration) {
 string Board::moveAlphabeta(int depth, int duration) {
   //ProfilerStart("alphabeta.log");
   Move m = alphabeta_move(*this, depth);
-  Move nega = negamax_move(*this, depth);
-					   
-  cout << repr() << endl;
+				          
+  //cout << repr() << endl;
 
   move(m);
   //ProfilerStop();
   
-  cout << repr() << endl;
+  //cout << repr() << endl;
+  //cout << "Returning: " << m.toString() << endl;
 
-  cout << "Returning: " << m.toString() << endl;
-
-  cout << "Negamax: " << nega.toString() << endl;
   return m.toString();
 }
 
