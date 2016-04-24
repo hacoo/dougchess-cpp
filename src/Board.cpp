@@ -12,7 +12,7 @@
 using namespace std;
 
 // Default constructor, initialize to an empty board
-Board::Board() {
+Board::Board(TimeManager& manager) : manager(manager) {
   for (int y = 0; y < RANKS; ++y) {
       for (int x = 0; x < FILES; ++x)
       board[y][x] = '.';
@@ -27,7 +27,8 @@ Board::Board() {
 // Copy constructor -- does NOT copy undo history
 Board::Board(const Board& other) 
   : turn(other.turn), 
-    player(other.player) {
+    player(other.player),
+    manager(manager) {
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
       board[y][x] = other.board[y][x];

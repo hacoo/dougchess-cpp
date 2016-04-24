@@ -16,11 +16,12 @@
 #include <vector>
 #include "cjson.h"
 #include "Game.h"
+#include "TimeManager.h"
 
 
 class Client {
  public: 
-  Client();
+  Client(TimeManager& manager);
   ~Client();
   int start(int _port, std::string _name);
   int connect(int _port, std::string _name);
@@ -30,7 +31,6 @@ class Client {
  private:
   void main_loop();
   void handle_json(cJSON* in, cJSON* out);
-
   bool running;
   bool connected;
   void* contextHandle;

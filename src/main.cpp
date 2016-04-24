@@ -9,10 +9,13 @@
 #include <stdio.h>
 #include <signal.h>
 #include "Client.h"
+#include "TimeManager.h"
 
 using namespace std;
 
-Client client;
+TimeManager manager;
+Client client(manager);
+
 
 void main_sigint(int signum) {
   printf("INTERRUPTED, SHUTTING DOWN\n");
@@ -27,6 +30,8 @@ int main() {
   // unclosed ports
   signal(SIGINT, main_sigint);
 
+  manager.start();
+  
   printf("Connecting as Doug...\n");
   client.start(54361, "Doug");
 

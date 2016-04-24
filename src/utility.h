@@ -14,6 +14,7 @@
 #include <vector>
 #include <sstream>
 #include <cstdlib>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include "rules.h"
 
 
@@ -22,5 +23,6 @@ int parse_board(const std::string b, int* newturn,
 void print_string_vec(const std::vector<std::string>& v);
 std::string board_to_string(const char board[RANKS][FILES]);
 int find_piece(const char board[RANKS][FILES], char piece);
+std::string current_time_string();
 
 #endif

@@ -15,7 +15,8 @@
 using namespace std;
 
 // Default constructor, start a completely new game.
-Game::Game() {
+Game::Game(TimeManager& manager) : manager(manager),
+				   main_board(manager) {
   main_board.reset();
 }
 

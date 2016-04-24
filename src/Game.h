@@ -14,11 +14,12 @@
 #include <vector>
 #include "rules.h"
 #include "Board.h"
+#include "TimeManager.h"
 
 class Game {
 
 public:
-  Game();
+  Game(TimeManager& manager);
   ~Game();
   void reset();
   void boardSet(const std::string& b);
@@ -42,6 +43,7 @@ public:
 
 private:
   Board main_board; // The current game board
+  TimeManager& manager;
   
 
 };

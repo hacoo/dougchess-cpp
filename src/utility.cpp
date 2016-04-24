@@ -65,3 +65,24 @@ int find_piece(const char board[RANKS][FILES], char piece) {
   }
   return -1;
 }
+
+string current_time_string()  {
+
+  stringstream sstream;
+  
+  boost::posix_time::ptime now = boost::posix_time::
+    microsec_clock::local_time();
+
+    const boost::posix_time::time_duration td = now.time_of_day();
+    const long hours        = td.hours();
+    const long minutes      = td.minutes();
+    const long seconds      = td.seconds();
+    const long milliseconds = td.total_milliseconds() -
+                              ((hours * 3600 + minutes * 60 + seconds) *
+			       1000);
+    char buf[40];
+    sprintf(buf, "%02ld:%02ld:%02ld.%03ld", 
+        hours, minutes, seconds, milliseconds);
+
+    return string(buf);
+}

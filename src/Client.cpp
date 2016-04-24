@@ -11,7 +11,7 @@
 using namespace std;
 
 /* Default constructor */
-Client::Client() {
+Client::Client(TimeManager& manager) : game(manager) {
   port = 0;
   name = "UNASSIGNED";
   contextHandle = NULL;

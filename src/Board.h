@@ -28,13 +28,12 @@ class Board;
 #include "Movegen.h"
 #include "negamax.h"
 #include "alphabeta.h"
-
-
+#include "TimeManager.h"
 
 class Board {
 
 public:
-  Board();
+  Board(TimeManager& manager);
   ~Board();
   Board(const Board& other);
   void reset();
@@ -60,6 +59,7 @@ public:
   std::string repr() const;
 
 private:
+  TimeManager& manager;
   char board[RANKS][FILES];
   int turn;
   char player;
