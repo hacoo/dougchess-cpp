@@ -54,7 +54,11 @@ void TimeManager::start(Board& board) {
 // Examine the board and determine how many milliseconds to allot
 // for this turn.
 int TimeManager::allot_time(Board& board) {
-  return 2000;
+  char player = board.getPlayer();
+  int turn    = board.getTurn();
+  int turns_remaining = MAX_TURNS - turn + 1;
+  return time_remaining.count() / turns_remaining;
+  
 }
 
 // Signals that time is out, should be called by the timer thread.
