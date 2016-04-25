@@ -95,6 +95,11 @@ class Move {
   Move (const Move& other) : start(other.start),
     finish(other.finish) {}
 
+  Move& operator = (const Move& other) {
+    clone(other);
+    return *this;
+  }
+
   // construct from stringvq
   Move(const std::string& m){
     std::vector<std::string> splits = split(m, '-');

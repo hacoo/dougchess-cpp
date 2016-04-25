@@ -19,6 +19,7 @@
 #define TIMEMANAGER_H
 
 class TimeManager;
+class OutOfTimeException;
 
 #include <string>
 #include <stdio.h>
@@ -38,7 +39,7 @@ class TimeManager {
  public:
   TimeManager();
   ~TimeManager();
-  void start(Board& board);
+  void start(const Board& board);
   bool out_of_time() const;
   void stop();
 
@@ -50,9 +51,16 @@ class TimeManager {
   std::atomic<bool> out_of_time_atom; 
   void signal_time_out();
   std::thread::id current_timer_thread;
-  int allot_time(Board& board);
+  int allot_time(const Board& board);
 };
 
+
+
+class OutOfTimeException : public std::runtime_error
+{
+ public:
+ OutOfTimeException(const char* msg) : runtime_error(msg) {}
+};
 
 #endif
 

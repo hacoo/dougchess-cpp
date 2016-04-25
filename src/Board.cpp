@@ -354,17 +354,45 @@ string Board::moveNegamax(int depth, int duration) {
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
   //ProfilerStart("alphabeta.log");
-  Move m = alphabeta_move(*this, depth);
-				          
-  //cout << repr() << endl;
 
+  Move searching;
+  Move m = movesShuffled()[0];
+
+  // If in tournament mode, start the timer
+  //if (duration == -1)
+  manager.start(*this);
+
+  chrono::milliseconds start;
+  chrono::milliseconds stop;
+
+  int i = 1;
+  
+  try { 
+    // use iterative deepening
+    while (i <= depth) {
+      start = ms_now();
+      searching = alphabeta_move(*this, i, manager);
+      stop  = ms_now();
+      m.clone(searching);
+      cout << "Searched to depth: " << i << "\n"
+	   << "  Time:            " << (stop-start).count() << "\n"
+	   << "  Result:          " << m.toString() << endl;
+      ++i;
+    }
+  } catch(OutOfTimeException& e) {
+    cout << "Timer ran out at search depth: " << i << endl;
+  }
+
+
+  //if (duration == -1)
+  manager.stop();
+
+  cout << "Making move: " << m.toString() << endl;
   move(m);
+  
   //ProfilerStop();
   
-  //cout << repr() << endl;
-  //cout << "Returning: " << m.toString() << endl;
-
-  return m.toString();
+   return m.toString();
 }
 
 // Make string representation of the board

@@ -10,8 +10,11 @@
 
 using namespace std;
 
-Move alphabeta_move(Board& board, int depth) {
+Move alphabeta_move(const Board& board,
+		    int depth,
+		    TimeManager& manager) {
 
+  Board newboard(board);
   Move best_move;
   int score = -CHESSMAX;  
 
@@ -20,12 +23,24 @@ Move alphabeta_move(Board& board, int depth) {
   int alpha = -CHESSMAX;
   int beta = CHESSMAX;
 
-  vector<Move> ms = board.movesEvaluated();
+  vector<Move> ms = newboard.movesEvaluated();
+  
 
   for (auto i : ms) {
-    board.move(i);
-    score = -alphabeta_move_score(board, depth-1, -beta, -alpha);
-    board.undo();
+    
+    if(manager.out_of_time()) {
+      cout << "Search interrupted!\n"
+	   << "  Depth: " << depth << endl;
+      throw OutOfTimeException("Search time exceeded");
+    }
+      
+    newboard.move(i);
+    score = -alphabeta_move_score(newboard,
+				  depth-1,
+				  -beta,
+				  -alpha,
+				  manager);
+    newboard.undo();
     if (score > alpha) {
       alpha = score;
       best_move.clone(i);
@@ -36,7 +51,11 @@ Move alphabeta_move(Board& board, int depth) {
 }
 
 // Get the best possible score using alphabeta search
-int alphabeta_move_score(Board& board, int depth, int alpha, int beta) {
+int alphabeta_move_score(Board& board,
+			 int depth,
+			 int alpha,
+			 int beta,
+			 TimeManager& manager) {
   if(depth <= 0 || board.winner() != '?') 
     return board.eval();
   
@@ -44,9 +63,20 @@ int alphabeta_move_score(Board& board, int depth, int alpha, int beta) {
   int score = -CHESSMAX;
   
   for(auto i : ms) {
+    
+    if(manager.out_of_time()) {
+      cout << "Search interrupted!\n"
+	   << "  Depth: " << depth << endl;
+      throw OutOfTimeException("Search time exceeded");
+    }
+
     board.move(i);
     score = max(score, 
-		-alphabeta_move_score(board, depth-1, -beta, -alpha));
+		-alphabeta_move_score(board,
+				      depth-1,
+				      -beta,
+				      -alpha,
+				      manager));
     board.undo();
     alpha = max(alpha, score);  
     if (alpha >= beta) 

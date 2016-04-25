@@ -25,7 +25,7 @@ TimeManager::TimeManager() : time_remaining(300000),
 
 TimeManager::~TimeManager() { }
 
-void TimeManager::start(Board& board) {
+void TimeManager::start(const Board& board) {
 
   if (timer_running) {
     cout << "ERROR -- started TimeManager already running" << endl;
@@ -53,12 +53,12 @@ void TimeManager::start(Board& board) {
 
 // Examine the board and determine how many milliseconds to allot
 // for this turn.
-int TimeManager::allot_time(Board& board) {
-  char player = board.getPlayer();
-  int turn    = board.getTurn();
+int TimeManager::allot_time(const Board& board) {
+  Board newboard(board);
+  char player = newboard.getPlayer();
+  int turn    = newboard.getTurn();
   int turns_remaining = MAX_TURNS - turn + 1;
   return time_remaining.count() / turns_remaining;
-  
 }
 
 // Signals that time is out, should be called by the timer thread.
@@ -85,7 +85,7 @@ void TimeManager::stop() {
   chrono::milliseconds time_used = stop_time - start_time;
   time_remaining -= time_used;
   // factor in unaccounted time
-  time_remaining -= chrono::milliseconds(200);
+  time_remaining -= chrono::milliseconds(50);
 
   cout << "TimeManager STOP: " << current_time_string() << "\n"
        << "  Time consumed:  " << time_used.count() << "\n"
