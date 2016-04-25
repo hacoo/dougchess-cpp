@@ -29,8 +29,6 @@ Move alphabeta_move(const Board& board,
   for (auto i : ms) {
     
     if(manager.out_of_time()) {
-      cout << "Search interrupted!\n"
-	   << "  Depth: " << depth << endl;
       throw OutOfTimeException("Search time exceeded");
     }
       
@@ -65,8 +63,6 @@ int alphabeta_move_score(Board& board,
   for(auto i : ms) {
     
     if(manager.out_of_time()) {
-      cout << "Search interrupted!\n"
-	   << "  Depth: " << depth << endl;
       throw OutOfTimeException("Search time exceeded");
     }
 

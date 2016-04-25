@@ -20,7 +20,7 @@
 
 using namespace std;
 
-TimeManager::TimeManager() : time_remaining(300000),
+TimeManager::TimeManager() : time_remaining(3000),
 			     out_of_time_atom(false) { }
 
 TimeManager::~TimeManager() { }
@@ -58,6 +58,10 @@ int TimeManager::allot_time(const Board& board) {
   char player = newboard.getPlayer();
   int turn    = newboard.getTurn();
   int turns_remaining = MAX_TURNS - turn + 1;
+
+  // Minimum time allotted is 200 ms
+  if(time_remaining.count() < 200)
+    return 200;
   return time_remaining.count() / turns_remaining;
 }
 
