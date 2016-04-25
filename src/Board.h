@@ -57,7 +57,8 @@ public:
   std::string moveNegamax(int depth, int duration);
   std::string moveAlphabeta(int depth, int duration);
   std::string repr() const;
-
+  void getBoard(char b[RANKS][FILES]) const;
+  
 private:
   TimeManager& manager;
   char board[RANKS][FILES];

@@ -86,3 +86,9 @@ string current_time_string()  {
 
     return string(buf);
 }
+
+
+chrono::milliseconds ms_now() {
+  return chrono::duration_cast<chrono::milliseconds>
+    (chrono::system_clock::now().time_since_epoch());  
+}

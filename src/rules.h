@@ -18,6 +18,7 @@
 //#include <gperftools/profiler.h>
 
 #define CHESSMAX 100000000
+#define MAX_TURNS 40
 
 inline std::vector<std::string>& _split(const std::string& s,
 					char delim,

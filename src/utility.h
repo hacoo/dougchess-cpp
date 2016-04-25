@@ -15,6 +15,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <chrono>
 #include "rules.h"
 
 
@@ -24,5 +25,5 @@ void print_string_vec(const std::vector<std::string>& v);
 std::string board_to_string(const char board[RANKS][FILES]);
 int find_piece(const char board[RANKS][FILES], char piece);
 std::string current_time_string();
-
+std::chrono::milliseconds ms_now();
 #endif

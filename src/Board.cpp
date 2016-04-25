@@ -64,7 +64,7 @@ string Board::toString() const {
 // Return the winner, or '?' if the game is not yet decided.
 // Will return a draw if both kings die, or the time runs out.
 char Board::winner() const {
-  if (turn > 41)
+  if (turn > MAX_TURNS + 1)
     return '=';
 
   bool white_alive = (find_piece(board, 'K') != -1);
@@ -376,4 +376,13 @@ string Board::repr() const {
      << "  Winner: " << winner() << "\n";
     
   return os.str();
+}
+
+// Fill board state into b
+void Board::getBoard(char b[RANKS][FILES]) const {
+  for (int y = 0; y < RANKS; ++y) {
+    for (int x = 0; x < FILES; ++x) {
+      b[y][x] = board[y][x];
+    }
+  }
 }

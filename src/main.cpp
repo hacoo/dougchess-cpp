@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include <signal.h>
+#include <thread>
+#include <chrono>
 #include "Client.h"
 #include "TimeManager.h"
 
@@ -29,8 +31,6 @@ int main() {
   // Register interrupt handler, otherwise we could have 
   // unclosed ports
   signal(SIGINT, main_sigint);
-
-  manager.start();
   
   printf("Connecting as Doug...\n");
   client.start(54361, "Doug");

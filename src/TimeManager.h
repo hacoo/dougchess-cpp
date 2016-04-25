@@ -38,13 +38,19 @@ class TimeManager {
  public:
   TimeManager();
   ~TimeManager();
-  void start();
+  void start(Board& board);
   bool out_of_time() const;
+  void stop();
 
  private:
-  int msecs_remaining;
+  std::chrono::milliseconds time_remaining;
+  std::chrono::milliseconds start_time;
+  std::chrono::milliseconds stop_time;
+  bool timer_running;
   std::atomic<bool> out_of_time_atom; 
-  void stop();
+  void signal_time_out();
+  std::thread::id current_timer_thread;
+  int allot_time(Board& board);
 };
 
 
