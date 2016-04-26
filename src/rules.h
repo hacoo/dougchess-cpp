@@ -17,8 +17,10 @@
 #include <cstdlib>
 //#include <gperftools/profiler.h>
 
+typedef unsigned long long int u64;
 #define CHESSMAX 100000000
 #define MAX_TURNS 40
+#define DISTINCT_PIECES 11
 
 inline std::vector<std::string>& _split(const std::string& s,
 					char delim,
