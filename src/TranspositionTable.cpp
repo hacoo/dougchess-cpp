@@ -11,8 +11,8 @@
 
 using namespace std;
 
-TranspositionTable::TranspositionTable(ZobristTable& zobrist)
-  : zobrist(zobrist) {
+TranspositionTable::TranspositionTable() :
+  misses(0), conflicts(0), hits(0), replacements(0) {
   table = new TranspositionEntry[TT_SIZE];
 }
 
@@ -30,5 +30,34 @@ void TranspositionTable::clear() {
   }  
 }
 
+TranspositionEntry TranspositionTable::lookup(u64 hash)
+  throw(TableMissException) {
+  
+  if(!table[hash].valid) {
+    misses += 1;
+    throw TableMissException("Transposition Table Entry Invalid");
+  }
 
+  if(!table[hash].hash != hash) {
+    conflicts += 1;
+    throw TableMissException("Transposition Table Entry Conflict");
+  }
 
+  hits += 1;
+  return table[hash];
+}
+
+void TranspositionTable::store(u64 hash,
+			       int score,
+			       int depth,
+			       char node_type) {
+  if(table[hash].valid && table[hash].hash == hash)
+    replacements += 1;
+
+  table[hash].hash      = hash;
+  table[hash].valid     = true;
+  table[hash].score     = score;
+  table[hash].depth     = depth;
+  table[hash].node_type = node_type;
+  
+}

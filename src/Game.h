@@ -15,11 +15,15 @@
 #include "rules.h"
 #include "Board.h"
 #include "TimeManager.h"
+#include "ZobristTable.h"
+#include "TranspositionTable.h"
 
 class Game {
 
 public:
-  Game(TimeManager& manager);
+  Game(TimeManager& manager,
+       ZobristTable& tt,
+       TranspositionTable& table);
   ~Game();
   void reset();
   void boardSet(const std::string& b);
@@ -44,6 +48,9 @@ public:
 private:
   Board main_board; // The current game board
   TimeManager& manager;
+  TranspositionTable& tt;
+  ZobristTable& zobrist;
+
   
 
 };

@@ -56,10 +56,9 @@ class TimeManager {
 
 
 
-class OutOfTimeException : public std::runtime_error
-{
+class OutOfTimeException : public std::runtime_error {
  public:
- OutOfTimeException(const char* msg) : runtime_error(msg) {}
+  OutOfTimeException(const char* msg) : runtime_error(msg) { }
 };
 
 #endif

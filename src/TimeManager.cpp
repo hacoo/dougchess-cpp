@@ -20,7 +20,7 @@
 
 using namespace std;
 
-TimeManager::TimeManager() : time_remaining(3000),
+TimeManager::TimeManager() : time_remaining(300000),
 			     out_of_time_atom(false) { }
 
 TimeManager::~TimeManager() { }

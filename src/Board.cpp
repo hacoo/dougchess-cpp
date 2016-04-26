@@ -12,7 +12,14 @@
 using namespace std;
 
 // Default constructor, initialize to an empty board
-Board::Board(TimeManager& manager) : manager(manager) {
+Board::Board(TimeManager& manager,
+	     ZobristTable& zobrist,
+	     TranspositionTable& tt) : turn(0),
+				       player('W'),
+				       manager(manager),
+				       zobrist(zobrist),
+				       tt(tt) {
+
   for (int y = 0; y < RANKS; ++y) {
       for (int x = 0; x < FILES; ++x)
       board[y][x] = '.';
@@ -20,15 +27,15 @@ Board::Board(TimeManager& manager) : manager(manager) {
 
   engine = new default_random_engine(time(NULL));
   
-  turn = 0;
-  player = 'W';
 }
 
 // Copy constructor -- does NOT copy undo history
 Board::Board(const Board& other) 
   : turn(other.turn), 
     player(other.player),
-    manager(manager) {
+    manager(manager),
+    zobrist(other.zobrist),
+    tt(other.tt) {
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
       board[y][x] = other.board[y][x];
@@ -359,8 +366,8 @@ string Board::moveAlphabeta(int depth, int duration) {
   Move m = movesShuffled()[0];
 
   // If in tournament mode, start the timer
-  //if (duration == -1)
-  manager.start(*this);
+  if (duration == -1)
+    manager.start(*this);
 
   chrono::milliseconds start;
   chrono::milliseconds stop;
@@ -383,9 +390,9 @@ string Board::moveAlphabeta(int depth, int duration) {
     cout << "Timer ran out at search depth: " << i << endl;
   }
 
-
-  //if (duration == -1)
-  manager.stop();
+  
+  if (duration == -1)
+    manager.stop();
 
   cout << "Making move: " << m.toString() << endl;
   move(m);

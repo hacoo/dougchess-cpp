@@ -17,11 +17,15 @@
 #include "cjson.h"
 #include "Game.h"
 #include "TimeManager.h"
+#include "ZobristTable.h"
+#include "TranspositionTable.h"
 
 
 class Client {
  public: 
-  Client(TimeManager& manager);
+  Client(TimeManager& manager,
+	 ZobristTable& zobrist,
+	 TranspositionTable& tt);
   ~Client();
   int start(int _port, std::string _name);
   int connect(int _port, std::string _name);

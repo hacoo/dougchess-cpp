@@ -147,6 +147,14 @@ class ScoredMove {
   int score;
 };
 
+// Exception types used in multiple places
+
+// Thrown when a lookup event fails
+class TableMissException : public std::runtime_error {
+ public:
+  TableMissException(const char* msg) : runtime_error(msg) { }
+};
+
 
 #endif
 

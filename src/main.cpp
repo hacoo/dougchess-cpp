@@ -18,9 +18,9 @@
 using namespace std;
 
 TimeManager manager;
-ZobristTable zobrist;
-
-Client client(manager);
+ZobristTable zobrist(1);
+TranspositionTable tt;
+Client client(manager, zobrist, tt);
 
 
 
@@ -36,13 +36,7 @@ int main() {
   // Register interrupt handler, otherwise we could have 
   // unclosed ports
   signal(SIGINT, main_sigint);
-
-
-  cout << "Creating transposition table" << endl;
-  TranspositionTable tt(zobrist);
-  cout << "Done!" << endl;
-  
-  
+    
   printf("Connecting as Doug...\n");
   client.start(54361, "Doug");
 

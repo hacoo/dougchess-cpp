@@ -15,8 +15,14 @@
 using namespace std;
 
 // Default constructor, start a completely new game.
-Game::Game(TimeManager& manager) : manager(manager),
-				   main_board(manager) {
+Game::Game(TimeManager& manager,
+	   ZobristTable& zobrist,
+	   TranspositionTable& tt) : manager(manager),
+				     zobrist(zobrist),
+				     tt(tt),
+				     main_board(manager,
+						zobrist,
+						tt) {
   main_board.reset();
 }
 

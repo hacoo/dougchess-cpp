@@ -29,11 +29,15 @@ class Board;
 #include "negamax.h"
 #include "alphabeta.h"
 #include "TimeManager.h"
+#include "ZobristTable.h"
+#include "TranspositionTable.h"
 
 class Board {
 
 public:
-  Board(TimeManager& manager);
+  Board(TimeManager& manager,
+	ZobristTable& zobrist,
+	TranspositionTable& tt);
   ~Board();
   Board(const Board& other);
   void reset();
@@ -61,6 +65,9 @@ public:
   
 private:
   TimeManager& manager;
+  ZobristTable& zobrist;
+  TranspositionTable& tt;
+ 
   char board[RANKS][FILES];
   int turn;
   char player;

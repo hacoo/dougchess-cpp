@@ -11,7 +11,10 @@
 using namespace std;
 
 /* Default constructor */
-Client::Client(TimeManager& manager) : game(manager) {
+Client::Client(TimeManager& manager,
+	       ZobristTable& zobrist,
+	       TranspositionTable& tt)
+  : game(manager, zobrist, tt) {
   port = 0;
   name = "UNASSIGNED";
   contextHandle = NULL;

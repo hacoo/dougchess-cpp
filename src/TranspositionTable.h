@@ -23,7 +23,6 @@
 #define TT_SIZE 16777216 // 2 ^ 24
 //#define TT_SIZE 10 // 2 ^ 24
 
-
 // Data storage class for TT entries
 class TranspositionEntry {
  public:
@@ -41,21 +40,27 @@ class TranspositionEntry {
   char node_type; 
   
  private:
-  
 };
 
 
 class TranspositionTable {
  public:
-  TranspositionTable(ZobristTable& zobrist);
+  TranspositionTable();
   ~TranspositionTable();
-  int lookup(u64 hash);
-  void store(u64 hash, int score);
+  TranspositionEntry lookup(u64 hash) throw(TableMissException);
+  void store(u64 hash,
+	     int score,
+	     int depth,
+	     char node_type);
   void clear();
 
  private:
+  u64 misses;
+  u64 conflicts;
+  u64 hits;
+  u64 replacements;
   TranspositionEntry* table;
-  ZobristTable& zobrist;
+  
 };
 
 #endif
