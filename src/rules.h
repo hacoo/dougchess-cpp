@@ -15,6 +15,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <stdexcept>
 //#include <gperftools/profiler.h>
 
 typedef unsigned long long int u64;
