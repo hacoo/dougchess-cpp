@@ -30,34 +30,61 @@ void TranspositionTable::clear() {
   }  
 }
 
-TranspositionEntry TranspositionTable::lookup(u64 hash)
+TranspositionEntry& TranspositionTable::lookup(u64 hash)
   throw(TableMissException) {
+
+  int i = hash % TT_SIZE;
   
-  if(!table[hash].valid) {
+  if(table[i].valid == false) {
     misses += 1;
     throw TableMissException("Transposition Table Entry Invalid");
   }
 
-  if(!table[hash].hash != hash) {
+  if(table[i].hash != hash) {
     conflicts += 1;
     throw TableMissException("Transposition Table Entry Conflict");
   }
 
   hits += 1;
-  return table[hash];
+  return table[i];
 }
 
 void TranspositionTable::store(u64 hash,
 			       int score,
 			       int depth,
 			       char node_type) {
-  if(table[hash].valid && table[hash].hash == hash)
+
+  int i = hash % TT_SIZE;
+  
+  if(table[i].valid && table[i].hash != hash)
     replacements += 1;
 
-  table[hash].hash      = hash;
-  table[hash].valid     = true;
-  table[hash].score     = score;
-  table[hash].depth     = depth;
-  table[hash].node_type = node_type;
+  table[i].hash      = hash;
+  table[i].valid     = true;
+  table[i].score     = score;
+  table[i].depth     = depth;
+  table[i].node_type = node_type;
+  stores += 1;
   
+}
+
+
+u64 TranspositionTable::getHits() {
+  return hits;
+}
+
+u64 TranspositionTable::getConflicts() {
+  return conflicts;
+}
+
+u64 TranspositionTable::getReplacements() {
+  return replacements;
+}
+
+u64 TranspositionTable::getMisses() {
+  return misses;
+}
+
+u64 TranspositionTable::getStores() {
+  return stores;
 }

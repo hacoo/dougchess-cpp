@@ -47,18 +47,24 @@ class TranspositionTable {
  public:
   TranspositionTable();
   ~TranspositionTable();
-  TranspositionEntry lookup(u64 hash) throw(TableMissException);
+  TranspositionEntry& lookup(u64 hash) throw(TableMissException);
   void store(u64 hash,
 	     int score,
 	     int depth,
 	     char node_type);
   void clear();
+  u64 getMisses();
+  u64 getConflicts();
+  u64 getHits();
+  u64 getReplacements();
+  u64 getStores();
 
  private:
   u64 misses;
   u64 conflicts;
   u64 hits;
   u64 replacements;
+  u64 stores;
   TranspositionEntry* table;
   
 };

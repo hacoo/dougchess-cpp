@@ -62,6 +62,8 @@ public:
   std::string moveAlphabeta(int depth, int duration);
   std::string repr() const;
   void getBoard(char b[RANKS][FILES]) const;
+  u64 zobristHash() const;
+  u64 updateHash(const u64 old, const Move& move) const;
   
 private:
   TimeManager& manager;

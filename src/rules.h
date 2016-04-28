@@ -62,7 +62,7 @@ class Square {
   Square(int rank, int file) : rank(rank), file(file) {}
 
   Square(const Square& other) : rank(other.rank), file(other.file) {}
-
+  
   Square(const std::string& s) {
     char f = s[0];
     char r = s[1];

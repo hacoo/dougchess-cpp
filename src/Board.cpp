@@ -195,6 +195,8 @@ void Board::move(const string& m) {
 // Also performs sanity check and will crash on an 
 // invalid mode.
 void Board::move(const Move& m) {
+
+  u64 old = zobristHash();
   
   int srank = m.start.rank;
   int frank = m.finish.rank;
@@ -360,7 +362,7 @@ string Board::moveNegamax(int depth, int duration) {
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
-  //ProfilerStart("alphabeta.log");
+  //  ProfilerStart("alphabeta.log");
 
   Move searching;
   Move m = movesShuffled()[0];
@@ -378,12 +380,19 @@ string Board::moveAlphabeta(int depth, int duration) {
     // use iterative deepening
     while (i <= depth) {
       start = ms_now();
-      searching = alphabeta_move(*this, i, manager);
+      searching = alphabeta_move(*this, i, manager, zobrist, tt);
       stop  = ms_now();
       m.clone(searching);
       cout << "Searched to depth: " << i << "\n"
 	   << "  Time:            " << (stop-start).count() << "\n"
-	   << "  Result:          " << m.toString() << endl;
+	   << "  Result:          " << m.toString() << "\n"
+	   << "  TT hits:         " << tt.getHits() << "\n"
+	   << "  TT misses:       " << tt.getMisses() << "\n"
+	   << "  TT replacements: " << tt.getReplacements() << "\n"
+	   << "  TT conflicts:    " << tt.getConflicts() << "\n"
+	   << "  TT stores:       " << tt.getStores() << endl;
+	
+      
       ++i;
     }
   } catch(OutOfTimeException& e) {
@@ -420,4 +429,14 @@ void Board::getBoard(char b[RANKS][FILES]) const {
       b[y][x] = board[y][x];
     }
   }
+}
+
+// Return the Zobrist hash for this board
+u64 Board::zobristHash() const {
+  return zobrist.hash_board(board, player);
+}
+
+// Return the updated that will result AFTER move move is made.
+u64 Board::updateHash(const u64 old, const Move& move) const {
+  return zobrist.update_hash(old, board, player, move);
 }

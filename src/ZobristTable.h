@@ -14,6 +14,8 @@
 #include <sstream>
 #include "rules.h"
 
+
+
 class ZobristTable {
 
  public:
@@ -24,9 +26,17 @@ class ZobristTable {
   u64 get(int rank, int file, char piece) const;
   std::string toString() const;  
   ZobristTable& operator = (const ZobristTable& other);
+  u64 hash_board(const char board[RANKS][FILES],
+		 const char player) const;
+  u64 update_hash(const u64 old,
+		  const char board[RANKS][FILES],
+		  const char player,
+		  const Move& move) const;
+  
     
  private:
-  u64 table[RANKS][FILES][DISTINCT_PIECES];
+  u64 table[RANKS][FILES][128];
+  u64 player_code[128];
 
 };
 
