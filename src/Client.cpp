@@ -110,7 +110,7 @@ void Client::main_loop() {
       return;
     }
 
-    //printf("Received: %s\n", charJson);
+    printf("Received: %s\n", charJson);
 
     jsonIn = cJSON_Parse(charJson);
 
@@ -118,7 +118,7 @@ void Client::main_loop() {
 
     charToSend = cJSON_PrintUnformatted(jsonOut);
 
-    //printf("Sending: %s\n", charToSend);
+    printf("Sending: %s\n", charToSend);
     
     if (zmq_send(socketHandle, charToSend, 
 		 strlen(charToSend), 0) == -1) {

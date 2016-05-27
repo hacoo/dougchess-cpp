@@ -369,7 +369,7 @@ string Board::moveAlphabeta(int depth, int duration) {
 
   // If in tournament mode, start the timer. Search
   // will be controlled by timer, or to a max depth of 8.
-  if (duration == -1) {
+  if (duration <= 0) {
     manager.start(*this);
     depth = 8;
   }
@@ -395,15 +395,13 @@ string Board::moveAlphabeta(int depth, int duration) {
 	   << "  TT conflicts:    " << tt.getConflicts() << "\n"
 	   << "  TT stores:       " << tt.getStores() << endl;
 	
-      
       ++i;
     }
   } catch(OutOfTimeException& e) {
     cout << "Timer ran out at search depth: " << i << endl;
   }
 
-  
-  if (duration == -1)
+  if (duration <= 0)
     manager.stop();
 
   cout << "Making move: " << m.toString() << endl;
