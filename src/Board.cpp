@@ -367,9 +367,12 @@ string Board::moveAlphabeta(int depth, int duration) {
   Move searching;
   Move m = movesShuffled()[0];
 
-  // If in tournament mode, start the timer
-  if (duration == -1)
+  // If in tournament mode, start the timer. Search
+  // will be controlled by timer, or to a max depth of 8.
+  if (duration == -1) {
     manager.start(*this);
+    depth = 8;
+  }
 
   chrono::milliseconds start;
   chrono::milliseconds stop;
