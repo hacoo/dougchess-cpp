@@ -366,10 +366,12 @@ string Board::moveAlphabeta(int depth, int duration) {
 
   Move searching;
   Move m = movesShuffled()[0];
+  // If depth is -1, we are in tournament mode
+  bool tournamentMode = (depth == -1) ? true : false;
 
   // If in tournament mode, start the timer. Search
   // will be controlled by timer, or to a max depth of 8.
-  if (duration <= 0) {
+  if (tournamentMode) {
     manager.start(*this);
     depth = 8;
   }
@@ -401,7 +403,7 @@ string Board::moveAlphabeta(int depth, int duration) {
     cout << "Timer ran out at search depth: " << i << endl;
   }
 
-  if (duration <= 0)
+  if (tournamentMode)
     manager.stop();
 
   cout << "Making move: " << m.toString() << endl;
