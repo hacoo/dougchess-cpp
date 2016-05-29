@@ -20,7 +20,7 @@
 #include "rules.h"
 #include "ZobristTable.h"
 
-#define TT_SIZE 16777216 // 2 ^ 24
+#define TT_SIZE 67108864 // 2 ^ 24
 //#define TT_SIZE 10 // 2 ^ 24
 
 // Data storage class for TT entries

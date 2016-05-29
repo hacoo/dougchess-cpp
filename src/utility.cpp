@@ -54,6 +54,23 @@ string board_to_string(const char board[RANKS][FILES]) {
   return sstream.str();
 }
 
+
+string flat_board_to_string(const char* board) {
+
+  stringstream sstream;
+  
+  for (int y = 0; y < RANKS; ++y) {
+    sstream << 6-y << " ";
+    for (int x = 0; x < FILES; ++x) {
+      sstream << board[y*FILES + x] << " ";
+    }
+    sstream << "\n";
+  }
+  sstream << "  a b c d e\n";
+  
+  return sstream.str();
+}
+
 // Return the position of a piece on the board. If it's
 // not found, return -1.
 int find_piece(const char board[RANKS][FILES], char piece) {
@@ -91,4 +108,10 @@ string current_time_string()  {
 chrono::milliseconds ms_now() {
   return chrono::duration_cast<chrono::milliseconds>
     (chrono::system_clock::now().time_since_epoch());  
+}
+
+void printCharVec(vector<char> v) {
+  for (auto i : v) {
+    cout << i << endl;
+  }
 }

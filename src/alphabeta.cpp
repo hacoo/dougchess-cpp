@@ -29,7 +29,7 @@ Move alphabeta_move(const Board& board,
   u64 tt_hash = newboard.zobristHash();
   u64 next_hash;
   
-  vector<Move> ms = newboard.movesEvaluated();
+  vector<Move> ms = newboard.movesTT();
   
 
   for (auto i : ms) {
@@ -71,7 +71,6 @@ int alphabeta_move_score(Board& board,
   if(depth <= 0 || board.winner() != '?') 
     return board.eval();
   
-  vector<Move> ms = board.movesEvaluated();
   int score = -CHESSMAX;
   u64 next_hash;
   int old_alpha = alpha;
@@ -81,6 +80,8 @@ int alphabeta_move_score(Board& board,
   if (tt_lookup(tt, tt_hash, depth, alpha, beta, score))
     return score;
 
+  // If the TT missed, generate a list of moves.
+  vector<Move> ms = board.movesEvaluated();
  
   for(auto i : ms) {
     

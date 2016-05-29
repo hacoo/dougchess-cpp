@@ -10,10 +10,12 @@
 #include <signal.h>
 #include <thread>
 #include <chrono>
+
 #include "Client.h"
 #include "TimeManager.h"
 #include "ZobristTable.h"
 #include "TranspositionTable.h"
+#include "testEndgame.h"
 
 using namespace std;
 
@@ -35,6 +37,11 @@ int main() {
 
   // Register interrupt handler, otherwise we could have 
   // unclosed ports
+  
+  testEndgame();
+  exit(0);
+  
+  
   signal(SIGINT, main_sigint);
     
   printf("Connecting as Doug...\n");

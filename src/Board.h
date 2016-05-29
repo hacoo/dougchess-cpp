@@ -41,6 +41,9 @@ public:
   ~Board();
   Board(const Board& other);
   void reset();
+  void clear();
+  void setPieceAt(char piece, int rank, int file);
+  void setPlayer(char _player);
   char winner() const;
   void boardSet(const std::string& b);
   std::string toString() const;
@@ -49,6 +52,7 @@ public:
   std::vector<Move> moves() const;
   std::vector<Move> movesShuffled() const;
   std::vector<Move> movesEvaluated();
+  std::vector<Move> movesTT();
   bool isEnemy(char piece) const;
   bool isOwn(char piece) const;
   bool isNothing(char piece) const;
@@ -103,6 +107,49 @@ private:
 	return false;
     }
   };
+
+  // Functor for move comparison with TT
+  struct moveCompareTT {
+    moveCompareTT(Board* b,
+		  TranspositionTable* _tt,
+		  u64 _hash) : board(b), tt(_tt), hash(_hash) {}
+    Board* board;
+    TranspositionTable* tt;
+    u64 hash;
+    
+    bool operator() (const Move& m1, const Move& m2) {
+      u64 next_hash;
+      int eval1;
+      int eval2;
+
+      next_hash = board->updateHash(hash, m1);
+      board->move(m1);
+      try {
+	eval1 = (tt->lookup(next_hash)).score;
+      } catch (TableMissException e) {
+	eval1 = -board->eval();
+      }
+      board->undo();
+      
+      next_hash = board->updateHash(hash, m2);
+      board->move(m2);
+      try {
+	eval2 = (tt->lookup(next_hash)).score;
+      } catch (TableMissException e) {
+	eval2 = -board->eval();
+      }
+      board->undo();
+
+
+      
+      if (eval1 > eval2)
+	return true;
+      else
+	return false;
+    }
+  };
+
+  
 };
 
 #endif 

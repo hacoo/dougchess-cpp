@@ -119,14 +119,45 @@ void Board::reset() {
       board[y][x] = b[y][x];
     }
   }
-
   // clear undo stacks
+
   while (!undo_move.empty())
     undo_move.pop();
   while (!undo_piece.empty())
     undo_piece.pop();
   pawn_promoted.clear();
  }
+
+// Clear the board, making all spaces empty
+void Board::clear() {
+  char b [RANKS][FILES] = {{'.', '.', '.', '.', '.'},
+   			   {'.', '.', '.', '.', '.'},
+  			   {'.', '.', '.', '.', '.'},
+  			   {'.', '.', '.', '.', '.'},
+  			   {'.', '.', '.', '.', '.'},
+  			   {'.', '.', '.', '.', '.'}};
+
+  for (int y = 0; y < RANKS; ++y) {
+    for (int x = 0; x < FILES; ++x) {
+      board[y][x] = b[y][x];
+    }
+  }
+  
+  // clear undo stacks
+  while (!undo_move.empty())
+    undo_move.pop();
+  while (!undo_piece.empty())
+    undo_piece.pop();
+  pawn_promoted.clear();  
+}
+
+void Board::setPieceAt(char piece, int rank, int file) {
+  board[rank][file] = piece;
+}
+
+void Board::setPlayer(char _player) {
+  player = _player;
+}
 
 // Set the board to the contents of b.
 void Board::boardSet(const string& b) {
@@ -158,6 +189,19 @@ vector<Move> Board::movesEvaluated() {
   sort(ms.begin(), ms.end(), moveCompare(this));
   return ms;
 }
+
+// Use TT scroe to order moves if available.
+// If not, fall back to a greedy move.
+vector<Move> Board::movesTT() {
+  vector<Move> ms;
+  u64 hash = zobristHash();
+  mgen.generateMoves(board, player, ms);
+  // shuffle to randomize 'equal' moves
+  shuffle(begin(ms), end(ms), *engine); 
+  sort(ms.begin(), ms.end(), moveCompareTT(this, &tt, hash));
+  return ms;
+}
+
 
 char Board::getPlayer() const {
   return player;
