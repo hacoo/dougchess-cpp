@@ -156,6 +156,21 @@ class TableMissException : public std::runtime_error {
   TableMissException(const char* msg) : runtime_error(msg) { }
 };
 
+// Lightweight board class -- contains only an array of positions,
+// directly accessible. For generating move combinations
+class lwBoard {
+ public:
+  char board [RANKS][FILES];
+};
+
+// Temporary endgame database entry -- contains
+// moves to mate and the desired next move
+class EndgameEntry {
+ public:
+  EndgameEntry() : to_mate(CHESSMAX) {}
+  Move move;
+  int to_mate;
+};
 
 #endif
 

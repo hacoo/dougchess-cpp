@@ -17,11 +17,11 @@
 #include "utility.h"
 
 
-std::vector<char*>
+std::vector<lwBoard*>
 generateAllPositions(std::vector<char>& pieces);
-void generateAllPositions(char* board,
+void generateAllPositions(lwBoard* board,
 			  std::vector<char>& pieces,
-			  std::vector<char*>& positions);
+			  std::vector<lwBoard*>& positions);
 
 
 #endif

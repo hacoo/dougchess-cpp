@@ -24,6 +24,7 @@ int parse_board(const std::string b, int* newturn,
 void print_string_vec(const std::vector<std::string>& v);
 std::string board_to_string(const char board[RANKS][FILES]);
 std::string flat_board_to_string(const char* board);
+std::string lwBoard_to_string(const lwBoard& board);
 int find_piece(const char board[RANKS][FILES], char piece);
 std::string current_time_string();
 std::chrono::milliseconds ms_now();

@@ -71,6 +71,23 @@ string flat_board_to_string(const char* board) {
   return sstream.str();
 }
 
+string lwBoard_to_string(const lwBoard& board) {
+
+  stringstream sstream;
+  
+  for (int y = 0; y < RANKS; ++y) {
+    sstream << 6-y << " ";
+    for (int x = 0; x < FILES; ++x) {
+      sstream << board.board[y][x] << " ";
+    }
+    sstream << "\n";
+  }
+  sstream << "  a b c d e\n";
+  
+  return sstream.str();
+}
+
+
 // Return the position of a piece on the board. If it's
 // not found, return -1.
 int find_piece(const char board[RANKS][FILES], char piece) {

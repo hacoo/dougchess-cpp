@@ -34,13 +34,12 @@ void main_sigint(int signum) {
 }
 
 int main() {
+  
+  //testEndgame();
+  //exit(0);
 
   // Register interrupt handler, otherwise we could have 
   // unclosed ports
-  
-  testEndgame();
-  exit(0);
-  
   
   signal(SIGINT, main_sigint);
     
