@@ -56,8 +56,12 @@ void TranspositionTable::store(u64 hash,
 
   int i = hash % TT_SIZE;
   
-  if(table[i].valid && table[i].hash != hash)
-    replacements += 1;
+  if(table[i].valid && table[i].hash != hash) {
+    if (table[i].depth > depth)
+      return; // Prefer best depth
+    else
+      replacements += 1;
+  }
 
   table[i].hash      = hash;
   table[i].valid     = true;

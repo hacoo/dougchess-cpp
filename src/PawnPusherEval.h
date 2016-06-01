@@ -16,7 +16,7 @@
 #include <time.h>
 #include "rules.h"
 
-#define PAWN_PUSH_VALUE 18;
+#define PAWN_PUSH_VALUE 10;
 
 class PawnPusherTable {
  public:
