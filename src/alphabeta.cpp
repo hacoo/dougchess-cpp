@@ -28,7 +28,9 @@ Move alphabeta_move(const Board& board,
   // Create the initial Zobrist hash
   u64 tt_hash = newboard.zobristHash();
   u64 next_hash;
-  
+
+  // Use the TT to order moves -- on the first search ONLY,
+  // as this is very expensive
   vector<Move> ms = newboard.movesTT();
   
 
@@ -81,6 +83,7 @@ int alphabeta_move_score(Board& board,
     return score;
 
   // If the TT missed, generate a list of moves.
+  // Don't bother using the TT to order moves, it's too slow
   vector<Move> ms = board.movesEvaluated();
  
   for(auto i : ms) {

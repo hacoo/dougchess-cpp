@@ -417,7 +417,7 @@ string Board::moveAlphabeta(int depth, int duration) {
   // will be controlled by timer, or to a max depth of 8.
   if (tournamentMode) {
     manager.start(*this);
-    depth = 8;
+    depth = 20;
   }
 
   chrono::milliseconds start;
@@ -428,6 +428,14 @@ string Board::moveAlphabeta(int depth, int duration) {
   try { 
     // use iterative deepening
     while (i <= depth) {
+      cout << "Beginner search at depth: " << i << "\n";
+      // Only search past 7 if there's more than half time remaining
+      if (depth > 7) {
+	if (manager.halfway_out_of_time()) {
+	  cout << "ABORTED -- Less than 50% time remaining" << endl;
+	  break;
+	}
+      }
       start = ms_now();
       searching = alphabeta_move(*this, i, manager, zobrist, tt);
       stop  = ms_now();

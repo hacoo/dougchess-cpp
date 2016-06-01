@@ -69,7 +69,6 @@ void TranspositionTable::store(u64 hash,
   table[i].depth     = depth;
   table[i].node_type = node_type;
   stores += 1;
-  
 }
 
 

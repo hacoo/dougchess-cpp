@@ -21,7 +21,9 @@
 using namespace std;
 
 TimeManager::TimeManager() : time_remaining(300000),
-			     out_of_time_atom(false) { }
+			     out_of_time_atom(false),
+			     half_time_over_atom(false),
+			     time_allotment(0){ }
 
 TimeManager::~TimeManager() { }
 
@@ -35,8 +37,10 @@ void TimeManager::start(const Board& board) {
   start_time = ms_now();
   timer_running = true;
   out_of_time_atom = false;
+  half_time_over_atom = false;
   
   int t = allot_time(board);
+  int half = t / 2;
 
   cout << "TimeManager START: " << current_time_string() << "\n"
        << "  Timer duration:  " << t << "\n"
@@ -48,21 +52,39 @@ void TimeManager::start(const Board& board) {
     });
   current_timer_thread = timer.get_id();
   timer.detach();
+
+  thread half_timer([half, this]() {
+      this_thread::sleep_for(chrono::milliseconds(half));
+      this->signal_half_time_out();
+    });
+  
+  half_timer_thread = half_timer.get_id();
+  half_timer.detach();
 }
 
 
 // Examine the board and determine how many milliseconds to allot
 // for this turn.
+//
+// Will be much more generous duing the first 20 turns of the game.
 int TimeManager::allot_time(const Board& board) {
   Board newboard(board);
   char player = newboard.getPlayer();
   int turn    = newboard.getTurn();
-  int turns_remaining = MAX_TURNS - turn + 1;
-
+  int turns_remaining;
+  if (turn < 20) {
+    turns_remaining = 40;
+  } else {
+    turns_remaining = MAX_TURNS - turn + 1;
+  }
+ 
   // Minimum time allotted is 200 ms
   if(time_remaining.count() < 200)
-    return 200;
-  return time_remaining.count() / turns_remaining;
+    time_allotment = 200;
+  else
+    time_allotment = time_remaining.count() / turns_remaining;
+
+  return time_allotment;
 }
 
 // Signals that time is out, should be called by the timer thread.
@@ -72,6 +94,13 @@ void TimeManager::signal_time_out() {
   }
   cout << "Timer expired: " << current_time_string() << endl;
 }
+
+void TimeManager::signal_half_time_out() {
+  if (current_timer_thread == this_thread::get_id()) {
+    half_time_over_atom = true;
+  }
+}
+
 
 // Called by TimeManager user (e.g. the board) to signal
 // that it is no longer moving. Timemanager will assume
@@ -98,4 +127,13 @@ void TimeManager::stop() {
 
 bool TimeManager::out_of_time() const {
   return out_of_time_atom.load();
+}
+
+void TimeManager::set_time_remaining(const int ms) {
+  time_remaining = chrono::milliseconds(ms);
+}
+
+// Returns true if more than 50% of the alloted time is remaining.
+bool TimeManager::halfway_out_of_time() const {
+  return half_time_over_atom.load();
 }
