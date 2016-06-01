@@ -13,6 +13,7 @@
 #include <vector>
 #include "rules.h"
 #include "EndgameGenerator.h"
+#include "MongoEndgame.h"
 
 void testEndgame();
 

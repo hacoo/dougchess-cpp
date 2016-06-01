@@ -18,6 +18,7 @@
 #include "posgen.h"
 #include "utility.h"
 #include "Movegen.h"
+#include "MongoEndgame.h"
 
 
 class EndgameGenerator {  
@@ -34,9 +35,13 @@ class EndgameGenerator {
 				     const Move& m);
   std::vector<lwBoard*> positions;
   EndgameEntry* entries;
+  int numEntries;
+  //MongoEndgame database;
 
  private:
   std::vector<char> pieces;
+  std::string tag;
+  void updateDatabase();
 }; 
 
 

@@ -172,5 +172,13 @@ class EndgameEntry {
   int to_mate;
 };
 
+class EndgamePos {
+ public:
+ EndgamePos(char _piece, int _square)
+   : piece(_piece), square(_square) {}
+  char piece;
+  int square;
+};
+
 #endif
 

@@ -23,16 +23,16 @@ void testEndgame() {
   vector<lwBoard*> positions = eg.positions;
   stringstream sstream;
   Move result_move;
-  int c = 0;
-  for(auto i : positions) {
+  // int c = 0;
+  // for(auto i : positions) {
     
-    if(EndgameGenerator::blackKingThreatenedOnBoard(*i, result_move)) {
-      cout << lwBoard_to_string(*i) << "\n";
-      cout << eg.entries[c].move.toString() << "\n";
-      cout << eg.entries[c].to_mate << "\n";
-    }
-    ++c;
-  }
+  //   if(EndgameGenerator::blackKingThreatenedOnBoard(*i, result_move)) {
+  //     cout << lwBoard_to_string(*i) << "\n";
+  //     cout << eg.entries[c].move.toString() << "\n";
+  //     cout << eg.entries[c].to_mate << "\n";
+  //   }
+  //   ++c;
+  // }
 
   // for (int i = 0; i < positions.size(); ++i) {
   //   if (eg.entries[i].to_mate == 1) {
@@ -43,9 +43,15 @@ void testEndgame() {
     
   // }
 
-  cout << sstream.str();
+  //cout << sstream.str();
   
   //string bstrings = eg.toString();
   //cout << bstrings;
+
+  vector<EndgamePos> egp;
+  egp.push_back(EndgamePos('k', 29));
+  EndgameEntry move;
+  MongoEndgame::updatePosition("kK", egp, move);
+  MongoEndgame::printCollection("kK");
 }
 

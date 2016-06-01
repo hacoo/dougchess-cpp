@@ -17,6 +17,11 @@ using namespace std;
 
 EndgameGenerator::EndgameGenerator(const vector<char> piecelist) {
   pieces = piecelist;
+  stringstream sstream;
+  for (auto c : piecelist) {
+    sstream << c;
+  }
+  tag = sstream.str();
 }
 
 EndgameGenerator::~EndgameGenerator() {
@@ -32,7 +37,14 @@ void EndgameGenerator::generate() {
   // Allocate the list of endgame entries, now that
   // the number is known
   entries = new EndgameEntry[positions.size()];
+  numEntries = positions.size();
+
+  // Initialize the database -- create an 'infinite' entry for each move
+  initDatabase();
+
+  // Start by seeding checkmate moves
   seedCheckmates();
+   
 }
 
 string EndgameGenerator::toString() {
@@ -61,7 +73,6 @@ void EndgameGenerator::seedCheckmates() {
     ++i;
   }
 
-  
   return;
 }
 
@@ -89,4 +100,19 @@ moveThreatensBlackKing(const lwBoard& board,
   if (board.board[y][x] == 'k')
     return true;
   return false;
+}
+
+// Create a database entry for each position,
+// initialize it to infinite depth-to-mate
+void EndgameDatabase::initDatabase() {
+  
+}
+
+// Copy the current state of this endgame table into the
+// permanent database. Will iterate over all positions, this
+// could be slow.
+void EndgameGenerator::updateDatabase() {
+  for (int i = 0; i < numEntries; ++i) {
+    ;
+  }
 }
