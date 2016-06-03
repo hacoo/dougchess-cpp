@@ -32,6 +32,7 @@ class Board;
 #include "ZobristTable.h"
 #include "TranspositionTable.h"
 #include "PawnPusherEval.h"
+//#include "PawnPusherCenterControl.h"
 
 class Board {
 
@@ -78,7 +79,9 @@ private:
   char board[RANKS][FILES];
   int turn;
   char player;
+  //PawnPusherCenterControl evaluator;
   PawnPusherEval evaluator;
+  //SimpleEval evaluator;
   Movegen mgen; // Modular move generator
   
   std::stack<Move> undo_move; // last undo move

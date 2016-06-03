@@ -41,7 +41,7 @@ class TimeManager {
   ~TimeManager();
   void start(const Board& board);
   bool out_of_time() const;
-  bool halfway_out_of_time() const;
+  bool early_out_of_time() const;
   void stop();
   void set_time_remaining(const int ms);
 
@@ -51,15 +51,14 @@ class TimeManager {
   std::chrono::milliseconds stop_time;
   bool timer_running;
   std::atomic<bool> out_of_time_atom;
-  std::atomic<bool> half_time_over_atom;
+  std::atomic<bool> early_time_over_atom;
   void signal_time_out();
-  void signal_half_time_out();
+  void signal_early_time_out();
   std::thread::id current_timer_thread;
-  std::thread::id half_timer_thread;
+  std::thread::id early_timer_thread;
   int allot_time(const Board& board);
   int time_allotment;
 };
-
 
 
 class OutOfTimeException : public std::runtime_error {

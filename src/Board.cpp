@@ -119,8 +119,8 @@ void Board::reset() {
       board[y][x] = b[y][x];
     }
   }
+  
   // clear undo stacks
-
   while (!undo_move.empty())
     undo_move.pop();
   while (!undo_piece.empty())
@@ -406,8 +406,8 @@ string Board::moveNegamax(int depth, int duration) {
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
-  //  ProfilerStart("alphabeta.log");
-
+  //ProfilerStart("alphabeta.log");
+  cout << "Duration: " << duration << endl;
   Move searching;
   Move m = movesShuffled()[0];
   // If depth is -1, we are in tournament mode
@@ -428,10 +428,10 @@ string Board::moveAlphabeta(int depth, int duration) {
   try { 
     // use iterative deepening
     while (i <= depth) {
-      cout << "Beginner search at depth: " << i << "\n";
+      cout << "Beginning search at depth: " << i << "\n";
       // Only search past 7 if there's more than half time remaining
       if (depth > 7) {
-	if (manager.halfway_out_of_time()) {
+	if (manager.early_out_of_time()) {
 	  cout << "ABORTED -- Less than 50% time remaining" << endl;
 	  break;
 	}
@@ -463,7 +463,7 @@ string Board::moveAlphabeta(int depth, int duration) {
   
   //ProfilerStop();
   
-   return m.toString();
+  return m.toString();
 }
 
 // Make string representation of the board

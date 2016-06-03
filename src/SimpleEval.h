@@ -52,6 +52,9 @@ class SimpleScoreTable {
 
 // Scoring array. Acts as a global lookup table assosciating a piece
 // to a score.
+
+// TODO: Make an awesome super fast version of this in assembly?
+
 static SimpleScoreTable simple_score_table;
 
 
@@ -73,6 +76,4 @@ class SimpleEval {
   
 };
 
-
 #endif
-
