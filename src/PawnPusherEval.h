@@ -65,7 +65,7 @@ class PawnPusherEval {
   ~PawnPusherEval() {}
 
   static int eval(const char board[RANKS][FILES], char player) {
-    int p = (player == 'W') ? 0 : 1;  
+    int p = (player == 'W') ? 0 : 1;
     float acc = 0.0;
     int max_rank_index = RANKS-1;
     

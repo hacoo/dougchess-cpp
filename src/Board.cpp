@@ -406,7 +406,7 @@ string Board::moveNegamax(int depth, int duration) {
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
-  //ProfilerStart("alphabeta.log");
+  ProfilerStart("alphabeta.log");
   cout << "Duration: " << duration << endl;
   Move searching;
   Move m = movesShuffled()[0];
@@ -461,7 +461,7 @@ string Board::moveAlphabeta(int depth, int duration) {
   cout << "Making move: " << m.toString() << endl;
   move(m);
   
-  //ProfilerStop();
+  ProfilerStop();
   
   return m.toString();
 }
