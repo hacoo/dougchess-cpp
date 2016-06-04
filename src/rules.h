@@ -23,6 +23,7 @@ typedef unsigned long long int u64;
 #define MAX_TURNS 40
 #define DISTINCT_PIECES 11
 
+
 inline std::vector<std::string>& _split(const std::string& s,
 					char delim,
 					std::vector<std::string>& elems) {
@@ -51,6 +52,21 @@ inline std::vector<std::string> split(const std::string& s, char delim) {
 #define ownp(piece, owner) ((owner == 'W') ? isupper(piece) : islower(piece))
 #define enemyp(piece, owner) ((owner == 'W') ? islower(piece) : isupper(piece))
 #define emptyp(piece) (piece == '.')
+
+// Indices for looking up in piece counter
+#define WPAWN 0
+#define WKNIGHT 1
+#define WBISHOP 2
+#define WROOK 3
+#define WQUEEN 4
+#define WKING 5
+#define BPAWN 6
+#define BKNIGHT 7
+#define BBISHOP 8
+#define BROOK 9
+#define BQUEEN 10
+#define BKING 11
+#define EMPTY 12
 
 
 

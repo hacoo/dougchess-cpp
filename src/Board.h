@@ -24,15 +24,17 @@ class Board;
 #include <chrono>
 #include "rules.h"
 #include "utility.h"
-#include "SimpleEval.h"
+//#include "SimpleEval.h"
 #include "Movegen.h"
 #include "negamax.h"
 #include "alphabeta.h"
 #include "TimeManager.h"
 #include "ZobristTable.h"
 #include "TranspositionTable.h"
-#include "PawnPusherEval.h"
+//#include "PawnPusherEval.h"
 //#include "PawnPusherCenterControl.h"
+
+#define PAWN_PUSH_VALUE 10
 
 class Board {
 
@@ -74,21 +76,27 @@ public:
 private:
   TimeManager& manager;
   ZobristTable& zobrist;
-  TranspositionTable& tt;
- 
+  TranspositionTable& tt; 
   char board[RANKS][FILES];
   int turn;
+
+  int scoretable[128];
+  
+  // In place evaluation function -- always from white's
+  // perspective
+  int score;
+  // Piece counter for quicker evals
   char player;
   //PawnPusherCenterControl evaluator;
-  PawnPusherEval evaluator;
+  //PawnPusherEval evaluator;
   //SimpleEval evaluator;
+  int pieceScore(const int y, const int x) const;
   Movegen mgen; // Modular move generator
-  
   std::stack<Move> undo_move; // last undo move
   std::stack<char> undo_piece; // piece present under undo space
   std::vector<char> pawn_promoted; // track whether a pawn promotion occured
   std::default_random_engine* engine;
-
+  
   // Functor for move comparison
   struct moveCompare {
     moveCompare(Board* b) : board(b) {}
@@ -143,9 +151,7 @@ private:
 	eval2 = -board->eval();
       }
       board->undo();
-
-
-      
+    
       if (eval1 > eval2)
 	return true;
       else

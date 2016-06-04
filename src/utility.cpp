@@ -132,3 +132,39 @@ void printCharVec(vector<char> v) {
     cout << i << endl;
   }
 }
+
+char pieceToInt(char piece) {
+  switch(piece) {
+  case '.': return (char) EMPTY;
+  case 'p': return (char) BPAWN;
+  case 'n': return (char) BKNIGHT;
+  case 'b': return (char) BBISHOP;
+  case 'r': return (char) BROOK;
+  case 'q': return (char) BQUEEN;
+  case 'k': return (char) BKING;
+  case 'P': return (char) WPAWN;
+  case 'N': return (char) WKNIGHT;
+  case 'B': return (char) WBISHOP;
+  case 'R': return (char) WROOK;
+  case 'Q': return (char) WQUEEN;
+  case 'K': return (char) WKING;    
+  }
+}
+
+char intToPiece(char i) {
+  switch((int) i) {
+  case EMPTY: return  '.';
+  case BPAWN: return  'p';
+  case BKNIGHT: return  'n';
+  case BBISHOP: return  'b';
+  case BROOK: return  'r';
+  case BQUEEN: return  'q';
+  case BKING: return  'k';
+  case WPAWN: return  'P';
+  case WKNIGHT: return  'N';
+  case WBISHOP: return  'B';
+  case WROOK: return  'R';
+  case WQUEEN: return  'Q';
+  case WKING: return  'K';
+  }
+}

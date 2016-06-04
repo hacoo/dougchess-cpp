@@ -18,15 +18,33 @@ Board::Board(TimeManager& manager,
 				       player('W'),
 				       manager(manager),
 				       zobrist(zobrist),
-				       tt(tt) {
+				       tt(tt),
+				       score(0){
 
   for (int y = 0; y < RANKS; ++y) {
       for (int x = 0; x < FILES; ++x)
       board[y][x] = '.';
   }
 
-  engine = new default_random_engine(time(NULL));
+
+  // Initialize the score table
+  scoretable['.'] = 0;
+
+  scoretable['p'] = -100;
+  scoretable['n'] = -300;
+  scoretable['b'] = -300;
+  scoretable['r'] = -500;
+  scoretable['q'] = -900;
+  scoretable['k'] = -1000000;
   
+  scoretable['P'] = 100;
+  scoretable['N'] = 300;
+  scoretable['B'] = 300;
+  scoretable['R'] = 500;
+  scoretable['Q'] = 900;
+  scoretable['K'] = 1000000;
+ 
+  engine = new default_random_engine(time(NULL)); 
 }
 
 // Copy constructor -- does NOT copy undo history
@@ -35,12 +53,31 @@ Board::Board(const Board& other)
     player(other.player),
     manager(manager),
     zobrist(other.zobrist),
-    tt(other.tt) {
+    tt(other.tt),
+    score(other.score){
+  
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
       board[y][x] = other.board[y][x];
     }
   }
+
+  scoretable['.'] = 0;
+
+  scoretable['p'] = -100;
+  scoretable['n'] = -300;
+  scoretable['b'] = -300;
+  scoretable['r'] = -500;
+  scoretable['q'] = -900;
+  scoretable['k'] = -1000000;
+
+  scoretable['P'] = 100;
+  scoretable['N'] = 300;
+  scoretable['B'] = 300;
+  scoretable['R'] = 500;
+  scoretable['Q'] = 900;
+  scoretable['K'] = 1000000;
+  
   engine = new default_random_engine(time(NULL));
 }
   
@@ -100,6 +137,8 @@ char Board::winner() const {
 void Board::reset() {
   turn = 1;
   player = 'W';
+  score = 0;
+  
   char b [RANKS][FILES] = {{'k', 'q', 'b', 'n', 'r'},
    			   {'p', 'p', 'p', 'p', 'p'},
   			   {'.', '.', '.', '.', '.'},
@@ -142,6 +181,8 @@ void Board::clear() {
       board[y][x] = b[y][x];
     }
   }
+
+  score = 0;
   
   // clear undo stacks
   while (!undo_move.empty())
@@ -162,6 +203,14 @@ void Board::setPlayer(char _player) {
 // Set the board to the contents of b.
 void Board::boardSet(const string& b) {
   parse_board(b, &turn, &player, board);
+  
+  score = 0;
+  // update score to reflect new board
+  for (int y = 0; y < RANKS; ++y) { 
+    for (int x = 0; x < FILES; ++x) {
+	score += pieceScore(y, x);
+      }
+  }
 }
 
 // Get all available moves for the current player in 
@@ -224,7 +273,14 @@ bool Board::isNothing(char piece) const {
 }
 
 int Board::eval() const {
-  return evaluator.eval(board, player);
+  // Old -- modular evaluator
+  //return evaluator.eval(board, player);
+
+  // Just return incremental eval
+  if (player == 'W')
+    return score;
+  else
+    return -score;
 }
 
 
@@ -249,11 +305,11 @@ void Board::move(const Move& m) {
 
   // Do a sanity check! Does NOT verify that the move
   // was legal for the piece.
+  /* 
   if (!isValid(srank, sfile) ||
        !isValid(frank, ffile) || 
       !ownp(board[srank][sfile], player) ||
-      ownp(board[frank][ffile], player))
-    {
+      ownp(board[frank][ffile], player)) {
     cout << "ERROR -- tried to make invalid undo\n" 
   	 << " Move: " << m.toString() << "\n"
   	 << " Board state:\n" 
@@ -269,11 +325,18 @@ void Board::move(const Move& m) {
       	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
     exit(1);
   }
+  */
   
   // catch undo piece before it's overwritten'
   char piece = board[srank][sfile];
   undo_piece.push(board[frank][ffile]);
-
+  
+  // update score to reflect captured piece
+  score -= pieceScore(frank, ffile);
+  // update score to take into account moved piece
+  score -= pieceScore(srank, sfile);
+  
+  
   // Make the move
   if ((piece == 'p') && (frank == RANKS-1)) {
     pawn_promoted.push_back('T');
@@ -287,8 +350,11 @@ void Board::move(const Move& m) {
     pawn_promoted.push_back('F');
     board[frank][ffile] = piece;
   }
-
+  
   board[srank][sfile] = '.';
+
+  // update score to reflect position of moved piece
+  score += pieceScore(frank, ffile);
 
   // switch who is playing
   if (player == 'W') {
@@ -306,7 +372,7 @@ void Board::move(const Move& m) {
 
 // Undo the last move. Will modify board state
 void Board::undo() {
-  
+  /*
   if (undo_move.empty()) {
     cout << "ERROR -- no move to undo" << endl;
     return;
@@ -317,14 +383,14 @@ void Board::undo() {
     exit(1);
     return;
   }
-  
+  */
   Move m = undo_move.top();
   char p = undo_piece.top();
   char promotion = pawn_promoted.back();
   undo_move.pop();
   undo_piece.pop();
   pawn_promoted.pop_back();
-
+  
   int srank = m.start.rank;
   int frank = m.finish.rank;
   int sfile = m.start.file;
@@ -332,6 +398,7 @@ void Board::undo() {
 
   // Do a sanity check! Does NOT verify that the move
   // was legal for the piece.
+  /*
   if (!isValid(srank, sfile) ||
       !isValid(frank, ffile) || 
       !enemyp(board[srank][sfile], player) ||
@@ -352,19 +419,30 @@ void Board::undo() {
       	 << "end own: " << ownp(board[frank][ffile], player) << "\n";
     exit(1);
   }
+  */
 
+  // remove score of piece at starting position
+  score -= pieceScore(srank, sfile);
+  
   // Check for pawn promotion
   if (promotion == 'T') {
-    if (player == 'B')
+    if (player == 'B') {
       board[srank][sfile] = 'P';
-    else
+    }
+    else {
       board[srank][sfile] = 'p';
+    } 
   }
   
   // move the piece back
   board[frank][ffile] = board[srank][sfile];
   // restore the previous piece
   board[srank][sfile] = p;
+
+  // add in score for moved piece at new location
+  score += pieceScore(frank, ffile);
+  // add in score for previously captured piece
+  score += pieceScore(srank, sfile);
   
   // switch who is playing
   if (player == 'B') {
@@ -406,7 +484,7 @@ string Board::moveNegamax(int depth, int duration) {
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
-  ProfilerStart("alphabeta.log");
+  //ProfilerStart("alphabeta.log");
   cout << "Duration: " << duration << endl;
   Move searching;
   Move m = movesShuffled()[0];
@@ -461,7 +539,7 @@ string Board::moveAlphabeta(int depth, int duration) {
   cout << "Making move: " << m.toString() << endl;
   move(m);
   
-  ProfilerStop();
+  //ProfilerStop();
   
   return m.toString();
 }
@@ -495,3 +573,16 @@ u64 Board::zobristHash() const {
 u64 Board::updateHash(const u64 old, const Move& move) const {
   return zobrist.update_hash(old, board, player, move);
 }
+
+// Return the value of the piece at position [y][x],
+// assuming White's perpsective
+int Board::pieceScore(const int y, const int x) const {
+  char piece = board[y][x];
+  int s = scoretable[piece];
+  if (piece == 'p')
+    return s - (y * PAWN_PUSH_VALUE);
+  if (piece == 'P')
+    return s + (RANKS - 1 - y) * PAWN_PUSH_VALUE;
+  return s;
+}
+
