@@ -79,8 +79,11 @@ private:
   TranspositionTable& tt; 
   char board[RANKS][FILES];
   int turn;
+  void init_scoretable();
+  void init_pawnpushtable();
 
   int scoretable[128];
+  int pawnpushtable[128][RANKS];
   
   // In place evaluation function -- always from white's
   // perspective

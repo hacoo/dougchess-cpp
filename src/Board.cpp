@@ -26,24 +26,9 @@ Board::Board(TimeManager& manager,
       board[y][x] = '.';
   }
 
-
-  // Initialize the score table
-  scoretable['.'] = 0;
-
-  scoretable['p'] = -100;
-  scoretable['n'] = -300;
-  scoretable['b'] = -300;
-  scoretable['r'] = -500;
-  scoretable['q'] = -900;
-  scoretable['k'] = -1000000;
+  init_scoretable();
+  init_pawnpushtable();
   
-  scoretable['P'] = 100;
-  scoretable['N'] = 300;
-  scoretable['B'] = 300;
-  scoretable['R'] = 500;
-  scoretable['Q'] = 900;
-  scoretable['K'] = 1000000;
- 
   engine = new default_random_engine(time(NULL)); 
 }
 
@@ -54,7 +39,7 @@ Board::Board(const Board& other)
     manager(manager),
     zobrist(other.zobrist),
     tt(other.tt),
-    score(other.score){
+    score(other.score) {
   
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
@@ -62,21 +47,8 @@ Board::Board(const Board& other)
     }
   }
 
-  scoretable['.'] = 0;
-
-  scoretable['p'] = -100;
-  scoretable['n'] = -300;
-  scoretable['b'] = -300;
-  scoretable['r'] = -500;
-  scoretable['q'] = -900;
-  scoretable['k'] = -1000000;
-
-  scoretable['P'] = 100;
-  scoretable['N'] = 300;
-  scoretable['B'] = 300;
-  scoretable['R'] = 500;
-  scoretable['Q'] = 900;
-  scoretable['K'] = 1000000;
+  init_scoretable();
+  init_pawnpushtable();
   
   engine = new default_random_engine(time(NULL));
 }
@@ -580,11 +552,45 @@ u64 Board::updateHash(const u64 old, const Move& move) const {
 // assuming White's perpsective
 int Board::pieceScore(const int y, const int x) const {
   char piece = board[y][x];
-  int s = scoretable[piece];
-  if (piece == 'p')
-    return s - (y * PAWN_PUSH_VALUE);
-  if (piece == 'P')
-    return s + (RANKS - 1 - y) * PAWN_PUSH_VALUE;
+  int s = scoretable[piece] + pawnpushtable[piece][y];
+  
+  // if (piece == 'p')
+  //   return s - (y * PAWN_PUSH_VALUE);
+  // if (piece == 'P')
+  //   return s + (RANKS - 1 - y) * PAWN_PUSH_VALUE;
   return s;
 }
 
+
+void Board::init_scoretable() {
+  scoretable['.'] = 0;
+
+  scoretable['p'] = -100;
+  scoretable['n'] = -300;
+  scoretable['b'] = -300;
+  scoretable['r'] = -500;
+  scoretable['q'] = -900;
+  scoretable['k'] = -1000000;
+
+  scoretable['P'] = 100;
+  scoretable['N'] = 300;
+  scoretable['B'] = 300;
+  scoretable['R'] = 500;
+  scoretable['Q'] = 900;
+  scoretable['K'] = 1000000;
+
+}
+
+
+void Board::init_pawnpushtable() {
+  for (int piece = 0; piece < 128; ++piece) {
+    for(int y = 0; y < RANKS; ++y) {
+      if (piece == 'p')
+	pawnpushtable[piece][y] = - (y*PAWN_PUSH_VALUE);
+      else if (piece == 'P')
+	pawnpushtable[piece][y] = (RANKS - 1 - y) * PAWN_PUSH_VALUE;
+      else
+	pawnpushtable[piece][y] = 0;
+    }
+  }  
+}
