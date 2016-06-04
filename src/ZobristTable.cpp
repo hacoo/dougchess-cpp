@@ -98,7 +98,6 @@ u64 ZobristTable::hash_board(const char board[RANKS][FILES],
     }
   }
   
-  
   return hash;
 }
 

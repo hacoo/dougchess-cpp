@@ -129,36 +129,29 @@ int tt_lookup(TranspositionTable& tt,
 	      int& beta,
 	      int& score) {
 
-  TranspositionEntry tt_entry;
+  TranspositionEntry* tt_entry;
     
-  try {
-    tt_entry = tt.lookup(hash);
-
-    if (tt_entry.depth >= depth) {
-	
-      if (tt_entry.node_type == 'E') {
-	score = tt_entry.score;
+    
+  int retcode = tt.lookup(hash, tt_entry);
+  if (retcode != 0) {
+    if (tt_entry->depth >= depth) {
+      if (tt_entry->node_type == 'E') {
+	score = tt_entry->score;
 	return 1;
-      }
-	  
-      else if (tt_entry.node_type == 'L') 
-	alpha = max(alpha, tt_entry.score);
-	
-      else if (tt_entry.node_type == 'U') 
-	beta = min(alpha, tt_entry.score);
-	
+      }	  
+      else if (tt_entry->node_type == 'L') 
+	alpha = max(alpha, tt_entry->score);	
+      else if (tt_entry->node_type == 'U') 
+	beta = min(alpha, tt_entry->score);
       else {
 	cout << "ERROR -- unknown TT node type" << endl;
 	exit(1);
       }
-	
       if (alpha >= beta) {
-	score = tt_entry.score;
+	score = tt_entry->score;
 	return 1;
       }
     }
-  } catch (TableMissException e) {
-    ;
   }
   
   return 0; // Got partial information or no hit

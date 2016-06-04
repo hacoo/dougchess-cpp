@@ -30,29 +30,32 @@ void TranspositionTable::clear() {
   }  
 }
 
-TranspositionEntry& TranspositionTable::lookup(u64 hash)
-  throw(TableMissException) {
+// looks up a TT entry, and sets entry to point to it if found.
+// Returns 1 on success, 0 on failure.
+int TranspositionTable::lookup(const u64 hash,
+			       TranspositionEntry*& entry) {
 
   int i = hash % TT_SIZE;
   
   if(table[i].valid == false) {
     misses += 1;
-    throw TableMissException("Transposition Table Entry Invalid");
+    return 0;
   }
 
   if(table[i].hash != hash) {
     conflicts += 1;
-    throw TableMissException("Transposition Table Entry Conflict");
+    return 0;
   }
 
   hits += 1;
-  return table[i];
+  entry = &table[i];
+  return 1;
 }
 
-void TranspositionTable::store(u64 hash,
-			       int score,
-			       int depth,
-			       char node_type) {
+void TranspositionTable::store(const u64 hash,
+			       const int score,
+			       const int depth,
+			       const char node_type) {
 
   int i = hash % TT_SIZE;
   
@@ -72,22 +75,22 @@ void TranspositionTable::store(u64 hash,
 }
 
 
-u64 TranspositionTable::getHits() {
+u64 TranspositionTable::getHits() const {
   return hits;
 }
 
-u64 TranspositionTable::getConflicts() {
+u64 TranspositionTable::getConflicts() const {
   return conflicts;
 }
 
-u64 TranspositionTable::getReplacements() {
+u64 TranspositionTable::getReplacements() const {
   return replacements;
 }
 
-u64 TranspositionTable::getMisses() {
+u64 TranspositionTable::getMisses() const {
   return misses;
 }
 
-u64 TranspositionTable::getStores() {
+u64 TranspositionTable::getStores() const {
   return stores;
 }

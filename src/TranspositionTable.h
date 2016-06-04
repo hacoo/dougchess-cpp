@@ -49,17 +49,17 @@ class TranspositionTable {
  public:
   TranspositionTable();
   ~TranspositionTable();
-  TranspositionEntry& lookup(u64 hash) throw(TableMissException);
-  void store(u64 hash,
-	     int score,
-	     int depth,
-	     char node_type);
+  int lookup(const u64 hash, TranspositionEntry*& entry);
+  void store(const u64 hash,
+	     const int score,
+	     const int depth,
+	     const char node_type);
   void clear();
-  u64 getMisses();
-  u64 getConflicts();
-  u64 getHits();
-  u64 getReplacements();
-  u64 getStores();
+  u64 getMisses() const;
+  u64 getConflicts() const;
+  u64 getHits() const;
+  u64 getReplacements() const;
+  u64 getStores() const;
 
  private:
   u64 misses;

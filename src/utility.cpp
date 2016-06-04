@@ -149,6 +149,8 @@ char pieceToInt(char piece) {
   case 'Q': return (char) WQUEEN;
   case 'K': return (char) WKING;    
   }
+  cout << "ERROR -- unknown piece to integer conversion" << endl;
+  return 0;
 }
 
 char intToPiece(char i) {
@@ -167,4 +169,6 @@ char intToPiece(char i) {
   case WQUEEN: return  'Q';
   case WKING: return  'K';
   }
+  cout << "ERROR -- unknown integer to piece conversion" << endl;
+  return 0;
 }

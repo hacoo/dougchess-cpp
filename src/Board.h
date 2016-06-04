@@ -133,23 +133,29 @@ private:
       u64 next_hash;
       int eval1;
       int eval2;
+      TranspositionEntry* entry;
+      int retcode;
 
       next_hash = board->updateHash(hash, m1);
       board->move(m1);
-      try {
-	eval1 = (tt->lookup(next_hash)).score;
-      } catch (TableMissException e) {
+      
+      retcode = tt->lookup(next_hash, entry);
+      if(retcode)
+	eval1 = entry->score;
+      else
 	eval1 = -board->eval();
-      }
+      
       board->undo();
       
       next_hash = board->updateHash(hash, m2);
       board->move(m2);
-      try {
-	eval2 = (tt->lookup(next_hash)).score;
-      } catch (TableMissException e) {
-	eval2 = -board->eval();
-      }
+
+      retcode = tt->lookup(next_hash, entry);
+      if(retcode)
+	eval2 = entry->score;
+      else
+	eval2 = -board->eval();      
+
       board->undo();
     
       if (eval1 > eval2)

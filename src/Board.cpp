@@ -139,12 +139,12 @@ void Board::reset() {
   player = 'W';
   score = 0;
   
-  char b [RANKS][FILES] = {{'k', 'q', 'b', 'n', 'r'},
+   char b [RANKS][FILES] = {{'k', 'q', 'b', 'n', 'r'},
    			   {'p', 'p', 'p', 'p', 'p'},
   			   {'.', '.', '.', '.', '.'},
   			   {'.', '.', '.', '.', '.'},
   			   {'P', 'P', 'P', 'P', 'P'},
-  			   {'R', 'N', 'B', 'Q', 'K'}};
+   			   {'R', 'N', 'B', 'Q', 'K'}};
   // char b [RANKS][FILES] = {{'.', '.', '.', '.', '.'},
   //  			   {'.', 'P', '.', '.', '.'},
   // 			   {'.', '.', 'p', '.', '.'},
@@ -295,8 +295,6 @@ void Board::move(const string& m) {
 // Also performs sanity check and will crash on an 
 // invalid mode.
 void Board::move(const Move& m) {
-
-  u64 old = zobristHash();
   
   int srank = m.start.rank;
   int frank = m.finish.rank;
@@ -305,7 +303,7 @@ void Board::move(const Move& m) {
 
   // Do a sanity check! Does NOT verify that the move
   // was legal for the piece.
-  /* 
+  /* DISABLED for tournament play
   if (!isValid(srank, sfile) ||
        !isValid(frank, ffile) || 
       !ownp(board[srank][sfile], player) ||
@@ -398,7 +396,7 @@ void Board::undo() {
 
   // Do a sanity check! Does NOT verify that the move
   // was legal for the piece.
-  /*
+  /* DISABLED for tournament play
   if (!isValid(srank, sfile) ||
       !isValid(frank, ffile) || 
       !enemyp(board[srank][sfile], player) ||
@@ -485,6 +483,7 @@ string Board::moveNegamax(int depth, int duration) {
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
   //ProfilerStart("alphabeta.log");
+  CALLGRIND_START_INSTRUMENTATION;
   cout << "Duration: " << duration << endl;
   Move searching;
   Move m = movesShuffled()[0];
@@ -510,7 +509,7 @@ string Board::moveAlphabeta(int depth, int duration) {
       // Only search past 7 if there's more than half time remaining
       if (depth > 7) {
 	if (manager.early_out_of_time()) {
-	  cout << "ABORTED -- Less than 50% time remaining" << endl;
+	  cout << "ABORTED -- Not enough time to continue" << endl;
 	  break;
 	}
       }
@@ -538,7 +537,10 @@ string Board::moveAlphabeta(int depth, int duration) {
 
   cout << "Making move: " << m.toString() << endl;
   move(m);
-  
+
+
+  CALLGRIND_STOP_INSTRUMENTATION;
+  CALLGRIND_DUMP_STATS;
   //ProfilerStop();
   
   return m.toString();
