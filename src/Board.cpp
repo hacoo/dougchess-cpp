@@ -19,7 +19,7 @@ Board::Board(TimeManager& manager,
 				       manager(manager),
 				       zobrist(zobrist),
 				       tt(tt),
-				       score(0){
+				       score(0) {
 
   for (int y = 0; y < RANKS; ++y) {
       for (int x = 0; x < FILES; ++x)
@@ -110,6 +110,9 @@ void Board::reset() {
   turn = 1;
   player = 'W';
   score = 0;
+
+  currently_pondering_atom = false;
+  continue_pondering_atom = false;
   
    char b [RANKS][FILES] = {{'k', 'q', 'b', 'n', 'r'},
    			   {'p', 'p', 'p', 'p', 'p'},
@@ -137,6 +140,7 @@ void Board::reset() {
   while (!undo_piece.empty())
     undo_piece.pop();
   pawn_promoted.clear();
+
  }
 
 // Clear the board, making all spaces empty
@@ -454,6 +458,8 @@ string Board::moveNegamax(int depth, int duration) {
 // Make an alpha-beta move, return the move made.
 // Will modify the board state.
 string Board::moveAlphabeta(int depth, int duration) {
+  
+  //stopPondering();
   //ProfilerStart("alphabeta.log");
   CALLGRIND_START_INSTRUMENTATION;
   cout << "Duration: " << duration << endl;
@@ -486,7 +492,7 @@ string Board::moveAlphabeta(int depth, int duration) {
 	}
       }
       start = ms_now();
-      searching = alphabeta_move(*this, i, manager, zobrist, tt);
+      searching = alphabeta_move(*this, i, manager, zobrist, tt, false);
       stop  = ms_now();
       m.clone(searching);
       cout << "Searched to depth: " << i << "\n"
@@ -514,6 +520,15 @@ string Board::moveAlphabeta(int depth, int duration) {
   CALLGRIND_STOP_INSTRUMENTATION;
   CALLGRIND_DUMP_STATS;
   //ProfilerStop();
+
+  /*
+  if(tournamentMode) {
+    thread ponderer([this]() {
+	this->startPondering();
+    });
+    ponderer.detach();
+  }
+  */
   
   return m.toString();
 }
@@ -593,4 +608,42 @@ void Board::init_pawnpushtable() {
 	pawnpushtable[piece][y] = 0;
     }
   }  
+}
+
+
+void Board::startPondering() {
+  currently_pondering_atom.store(true);
+  continue_pondering_atom.store(true);
+  cout << "Starting to ponder... " << endl;
+
+  Move searching;
+  Move m = movesShuffled()[0];
+  int i = 1;
+    while (true) {
+      try {
+	cout << "Pondering depth: " << i << endl;
+	m = alphabeta_move(*this, i, manager, zobrist, tt, true);
+	++i;
+      }
+
+      catch(PonderDoneException& e) {
+	cout << "Pondering interrupted. " << endl;
+	break;
+      }
+      catch(OutOfTimeException& e) {
+	cout << "A timer went off, who cares" << endl;
+      }
+    }
+  currently_pondering_atom.store(false); // Signal that pondering is done
+}
+
+
+void Board::stopPondering() {
+  continue_pondering_atom.store(false);
+  if(!currently_pondering_atom.load()) {
+    cout << "WARNING -- tried to stop pondering, but we're not pondering right now " << endl;
+    return;
+  }
+  while(currently_pondering_atom.load())
+    ; // Spin wait until pondering wraps up
 }

@@ -24,11 +24,15 @@
 #include "TranspositionTable.h"
 
 
+extern std::atomic<bool> currently_pondering_atom;
+extern std::atomic<bool> continue_pondering_atom;
+
 Move alphabeta_move(const Board& board,
 		    int depth,
 		    TimeManager& manager,
 		    ZobristTable& zobrist,
-		    TranspositionTable& tt);
+		    TranspositionTable& tt,
+		    bool ponderMode);
 
 int alphabeta_move_score(Board& board,
 			 int depth,
@@ -37,7 +41,8 @@ int alphabeta_move_score(Board& board,
 			 TimeManager& manager,
 			 ZobristTable& zobrist,
 			 u64 tt_hash,
-			 TranspositionTable& tt);
+			 TranspositionTable& tt,
+			 bool ponderMode);
 
 int tt_lookup(TranspositionTable& tt,
 	      u64 hash,

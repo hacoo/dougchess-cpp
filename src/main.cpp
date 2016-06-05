@@ -10,6 +10,7 @@
 #include <signal.h>
 #include <thread>
 #include <chrono>
+#include <atomic>
 
 #include "Client.h"
 #include "TimeManager.h"
@@ -24,6 +25,9 @@ ZobristTable zobrist(1);
 TranspositionTable tt;
 Client client(manager, zobrist, tt);
 
+// global flags to continue pondering
+std::atomic<bool> currently_pondering_atom;
+std::atomic<bool> continue_pondering_atom;
 
 
 void main_sigint(int signum) {

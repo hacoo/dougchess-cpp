@@ -36,6 +36,10 @@ class Board;
 
 #define PAWN_PUSH_VALUE 10
 
+extern std::atomic<bool> currently_pondering_atom;
+extern std::atomic<bool> continue_pondering_atom;
+
+
 class Board {
 
 public:
@@ -72,6 +76,8 @@ public:
   void getBoard(char b[RANKS][FILES]) const;
   u64 zobristHash() const;
   u64 updateHash(const u64 old, const Move& move) const;
+  void startPondering();
+  void stopPondering();
   
 private:
   TimeManager& manager;
@@ -99,7 +105,7 @@ private:
   std::stack<char> undo_piece; // piece present under undo space
   std::vector<char> pawn_promoted; // track whether a pawn promotion occured
   std::default_random_engine* engine;
-  
+    
   // Functor for move comparison
   struct moveCompare {
     moveCompare(Board* b) : board(b) {}
@@ -166,10 +172,16 @@ private:
       else
 	return false;
     }
-  };
-
-  
+  };  
 };
+
+
+
+class PonderDoneException : public std::runtime_error {
+ public:
+  PonderDoneException(const char* msg) : runtime_error(msg) { }
+};
+
 
 #endif 
 

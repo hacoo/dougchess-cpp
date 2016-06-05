@@ -14,7 +14,8 @@ Move alphabeta_move(const Board& board,
 		    int depth,
 		    TimeManager& manager,
 		    ZobristTable& zobrist,
-		    TranspositionTable& tt) {
+		    TranspositionTable& tt,
+		    bool ponderMode) {
 		   
   Board newboard(board);
   Move best_move;
@@ -35,8 +36,14 @@ Move alphabeta_move(const Board& board,
   
   for (auto i : ms) {
     
-    if(manager.out_of_time()) {
-      throw OutOfTimeException("Search time exceeded");
+    if (!ponderMode) {
+      if(manager.out_of_time()) {
+	throw OutOfTimeException("Search time exceeded");
+      }
+    } else {
+      if(!continue_pondering_atom.load()) {
+	throw PonderDoneException("Pondering interrupted");
+      }
     }
 
     next_hash = newboard.updateHash(tt_hash, i);
@@ -48,7 +55,8 @@ Move alphabeta_move(const Board& board,
 				  manager,
 				  zobrist,
 				  next_hash,
-				  tt);
+				  tt,
+				  ponderMode);
     newboard.undo();
     if (score > alpha) {
       alpha = score;
@@ -67,7 +75,8 @@ int alphabeta_move_score(Board& board,
 			 TimeManager& manager,
 			 ZobristTable& zobrist,
 			 u64 tt_hash,
-			 TranspositionTable& tt) {
+			 TranspositionTable& tt,
+			 bool ponderMode) {
   
   if(depth <= 0 || board.winner() != '?') 
     return board.eval();
@@ -86,10 +95,17 @@ int alphabeta_move_score(Board& board,
   vector<Move> ms = board.movesEvaluated();
  
   for(auto i : ms) {
-    
-    if(manager.out_of_time()) {
-      throw OutOfTimeException("Search time exceeded");
+
+    if (!ponderMode) {
+      if(manager.out_of_time()) {
+	throw OutOfTimeException("Search time exceeded");
+      }
+    } else {
+      if(!continue_pondering_atom.load()) {
+	throw PonderDoneException("Pondering interrupted");
+      }
     }
+
     
     next_hash = board.updateHash(tt_hash, i);
     board.move(i);
@@ -101,7 +117,8 @@ int alphabeta_move_score(Board& board,
 				      manager,
 				      zobrist,
 				      next_hash,
-				      tt));
+				      tt,
+				      ponderMode));
     board.undo();
 
     
