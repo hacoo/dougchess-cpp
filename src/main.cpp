@@ -44,6 +44,7 @@ int main() {
 
   // Register interrupt handler, otherwise we could have 
   // unclosed ports
+  tt.clear();
   
   signal(SIGINT, main_sigint);
     

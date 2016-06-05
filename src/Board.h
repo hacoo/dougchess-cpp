@@ -87,9 +87,11 @@ private:
   int turn;
   void init_scoretable();
   void init_pawnpushtable();
+  void init_boardmask();
 
   int scoretable[128];
   int pawnpushtable[128][RANKS];
+  int boardmask[128][RANKS][FILES];
   
   // In place evaluation function -- always from white's
   // perspective

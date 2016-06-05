@@ -74,8 +74,10 @@ int TimeManager::allot_time(const Board& board) {
   int turns_remaining = max(40 - turn, 1);
 
   // More time is allocated to early turns
-  // Since there's no opening book, we don't skimp in the beginning.
-  float chunks[8] = {2.0, 1.75, 1.5, 1.25, 1.0, 0.75, 0.5, 0.25};
+  // Heavily prioritize early turns, as getting an early advantage
+  // is very important, and the late game tends to go by fast
+  // due to TT
+  float chunks[8] = {4.0, 4.0, 4.0, 3.0, 2.5, 1.5, 1.0, 0.5};
   int chunk = turn / 5;
 
   cout << "Allocating time in chunk: " << chunk << endl;

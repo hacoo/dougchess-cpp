@@ -28,6 +28,7 @@ Board::Board(TimeManager& manager,
 
   init_scoretable();
   init_pawnpushtable();
+  init_boardmask();
   
   engine = new default_random_engine(time(NULL)); 
 }
@@ -49,6 +50,7 @@ Board::Board(const Board& other)
 
   init_scoretable();
   init_pawnpushtable();
+  init_boardmask();
   
   engine = new default_random_engine(time(NULL));
 }
@@ -568,7 +570,7 @@ u64 Board::updateHash(const u64 old, const Move& move) const {
 int Board::pieceScore(const int y, const int x) const {
   char piece = board[y][x];
   int s = scoretable[piece] + pawnpushtable[piece][y];
-  
+  //int s = scoretable[piece] + boardmask[piece][y][x];
   // if (piece == 'p')
   //   return s - (y * PAWN_PUSH_VALUE);
   // if (piece == 'P')
@@ -601,7 +603,7 @@ void Board::init_pawnpushtable() {
   for (int piece = 0; piece < 128; ++piece) {
     for(int y = 0; y < RANKS; ++y) {
       if (piece == 'p')
-	pawnpushtable[piece][y] = - (y*PAWN_PUSH_VALUE);
+	pawnpushtable[piece][y] = -(y*PAWN_PUSH_VALUE);
       else if (piece == 'P')
 	pawnpushtable[piece][y] = (RANKS - 1 - y) * PAWN_PUSH_VALUE;
       else
@@ -609,6 +611,39 @@ void Board::init_pawnpushtable() {
     }
   }  
 }
+
+// pawn push / center control boardmask
+void Board::init_boardmask() {
+  for (int piece = 0; piece < 128; ++piece) {
+    for(int y = 0; y < RANKS; ++y) {
+      for (int x = 0; x < FILES; ++x) {
+	if (piece == '.')
+	  boardmask[piece][y][x] = 0;
+	else if (piece == 'P')
+	  boardmask[piece][y][x] = (RANKS - 1 - y) * PAWN_PUSH_VALUE;
+	else if (piece == 'p')
+	  boardmask[piece][y][x] = -(y*PAWN_PUSH_VALUE);
+	else if(isupper(piece)) {
+	  boardmask[piece][y][x] = 10 - 5 * abs(2-x);
+	  if (y > 2) 
+	    boardmask[piece][y][x] += 15 - 5 * abs(2-y);
+	  else
+	    boardmask[piece][y][x] += 15 - 5 * abs(3-y);
+	}
+	else if(islower(piece)) {
+	  boardmask[piece][y][x] = -(10 - 5 * abs(2-x));
+	  if (y > 2) 
+	    boardmask[piece][y][x] -= 15 - 5 * abs(2-y);
+	  else
+	    boardmask[piece][y][x]-= 15 - 5 * abs(3-y);
+	}
+	else
+	  boardmask[piece][y][x] = 0;
+      }
+    }
+  }
+}
+
 
 
 void Board::startPondering() {
@@ -647,3 +682,4 @@ void Board::stopPondering() {
   while(currently_pondering_atom.load())
     ; // Spin wait until pondering wraps up
 }
+
