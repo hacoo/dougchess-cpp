@@ -569,13 +569,31 @@ u64 Board::updateHash(const u64 old, const Move& move) const {
 // assuming White's perpsective
 int Board::pieceScore(const int y, const int x) const {
   char piece = board[y][x];
-  int s = scoretable[piece] + pawnpushtable[piece][y];
+  //  int s = scoretable[piece] + pawnpushtable[piece][y];
   //int s = scoretable[piece] + boardmask[piece][y][x];
   // if (piece == 'p')
   //   return s - (y * PAWN_PUSH_VALUE);
   // if (piece == 'P')
   //   return s + (RANKS - 1 - y) * PAWN_PUSH_VALUE;
-  return s;
+  switch (piece) {	    
+  case '.': return 0;
+    
+  case 'p':
+    return -100 - (y * PAWN_PUSH_VALUE);
+  case 'n': return -300;
+  case 'b': return -300;
+  case 'r': return -500;
+  case 'q': return -900;
+  case 'k': return -100000;
+  case 'P':
+    return 100 + ((RANKS - 1 - y) * PAWN_PUSH_VALUE);
+  case 'N': return 300;
+  case 'B': return 300;
+  case 'R': return 500;
+  case 'Q': return 900;
+  case 'K': return 100000;
+  }
+  return 0;
 }
 
 
