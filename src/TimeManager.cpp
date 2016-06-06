@@ -77,7 +77,7 @@ int TimeManager::allot_time(const Board& board) {
   // Heavily prioritize early turns, as getting an early advantage
   // is very important, and the late game tends to go by fast
   // due to TT
-  float chunks[8] = {4.0, 4.0, 4.0, 3.0, 2.5, 1.5, 1.0, 0.5};
+  float chunks[8] = {2.0, 2.0, 1.75, 1.5, 1.25, 1.0, 1.0, 1.0};
   int chunk = turn / 5;
 
   cout << "Allocating time in chunk: " << chunk << endl;
