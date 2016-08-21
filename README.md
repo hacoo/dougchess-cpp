@@ -67,11 +67,11 @@ Starting a match on the local machine is slightly trickier, since you must start
 with separate ports. The ai_port and client_port for each AI must not conflict. So, for example, running
 two AIs might look something like this:
 
-> # starting the first AI:
+Starting the first AI:
 > douchess/bin/dougchess -port 10000 -name aione
 > framework/framework -ai_port 10000 -client_port 8080
 
-> # in a second terminal, start the other AI
+Then, in a second terminal, start the other AI: 
 > dougchess/bin/dougchess -port 10001 -name aitwo
 > framework/framework -ai_port 10001 -client_port 8081
 
