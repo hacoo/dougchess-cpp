@@ -16,8 +16,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <stdexcept>
-#include <gperftools/profiler.h>
-#include <valgrind/callgrind.h>
+//#include <gperftools/profiler.h>
+//#include <valgrind/callgrind.h>
 
 typedef unsigned long long int u64;
 #define CHESSMAX 100000000

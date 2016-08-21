@@ -10,3 +10,7 @@ The binary will appear at bin/dougchess. You may run it directly, or
 just use:
 
 > make run
+
+If you need to rebuild, use:
+
+> make clean

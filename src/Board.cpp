@@ -463,7 +463,7 @@ string Board::moveAlphabeta(int depth, int duration) {
   
   //stopPondering();
   //ProfilerStart("alphabeta.log");
-  CALLGRIND_START_INSTRUMENTATION;
+  //CALLGRIND_START_INSTRUMENTATION;
   cout << "Duration: " << duration << endl;
   Move searching;
   Move m = movesShuffled()[0];
@@ -519,8 +519,8 @@ string Board::moveAlphabeta(int depth, int duration) {
   move(m);
 
 
-  CALLGRIND_STOP_INSTRUMENTATION;
-  CALLGRIND_DUMP_STATS;
+  //  CALLGRIND_STOP_INSTRUMENTATION;
+  //CALLGRIND_DUMP_STATS;
   //ProfilerStop();
 
   /*
