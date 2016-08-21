@@ -8,13 +8,14 @@ The guiding principles in development of Dougchess were high performance and ite
 During development, careful attention was taken to keep code fast, simple, and modular.
 Each potential new feature was tested extensively to determine whether it was worth the performance cost.
 Examples of cut features include the endgame database (a large transposition table makes this unnecessary, due
-to the reduced search space in Minichess) and numerous evaluation heuristics ()
+to the reduced search space in Minichess) and numerous evaluation heuristics (since eval() is called
+exponentially many times, it is vital that it do as little work as possible).
 
 #Prerequisites
 Dougchess has been tested on Ubuntu Linux ONLY.
 
 Douchess requires libzmq version 3.x.x. In addition to Dougchess, you must
-install the Minichess framework, which provides a frontend for ineracting
+install the Minichess framework, which provides a frontend for interacting
 with the AI.
 
 To download and install libzmq 3, look here: http://zeromq.org/intro:get-the-software
@@ -49,16 +50,16 @@ details on building the framework.
 #Playing against the AI
 Clicking on pieces in the browser interface will allow you to move them. You may ask the AI
 to make a move at any time by hitting the chess_moveAlphabeta button. This button includes two
-paramters: the maximum search duration and the maximum search depth. Increase the search depth
+parameters: the maximum search duration and the maximum search depth. Increase the search depth
 for more challenging play but slower moves.
 
 #Challenging other AIs
 To initiate a match against another AI, you must use the 'Internet' box at the bottom of the Framework
-interface. See the Framwork readme for more details on using this feature.
+interface. See the Framework readme for more details on using this feature.
 
 #Playing the AI against itself
 Since you probably won't find many other AIs online, the easiest way to see Dougchess
-in action is to start two separate instances of the framework, login via two accounts, and initiate a match.
+in action is to start two separate instances of the framework, log in via two accounts, and initiate a match.
 If you have access to two separate machines, this is easy -- just install Dougchess and the framework on
 both, create two IMCS accounts, and start a match between them.
 
