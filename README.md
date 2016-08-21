@@ -18,6 +18,10 @@ Douchess requires libzmq version 3.x.x. In addition to Dougchess, you must
 install the Minichess framework, which provides a frontend for interacting
 with the AI.
 
+Additionally, Dougchess makes use of Boost Chrono for time managment. To install, on Ubuntu:
+
+> sudo apt-get install libboost-chrono-dev
+
 To download and install libzmq 3, look here: http://zeromq.org/intro:get-the-software
 
 The minichess AI framework can be found here: https://github.com/CodeRect/teaching-minichess
