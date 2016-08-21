@@ -69,10 +69,12 @@ two AIs might look something like this:
 
 Starting the first AI:
 > douchess/bin/dougchess -port 10000 -name aione
+
 > framework/framework -ai_port 10000 -client_port 8080
 
 Then, in a second terminal, start the other AI: 
 > dougchess/bin/dougchess -port 10001 -name aitwo
+
 > framework/framework -ai_port 10001 -client_port 8081
 
 Then, start two browser windows, one connecting to localhost:8080 and the other to localhost:8081.
