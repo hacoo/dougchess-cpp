@@ -12,7 +12,7 @@ to the reduced search space in Minichess) and numerous evaluation heuristics (si
 exponentially many times, it is vital that it do as little work as possible).
 
 ## License
-This software is distributed under the GNU General Public License. See the file COPYING in this repository for more information. 
+This software is distributed under the GNU General Public License. See the file LICENSE in this repository for more information. 
 
 ## Prerequisites
 Dougchess has been tested on Ubuntu Linux ONLY.
