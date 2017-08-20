@@ -1,17 +1,20 @@
-#Dougchess
+## Dougchess
 
-#Overview
+## Overview
 Dougchess is a high performance C++ Minichess AI. It took 1st place in the 2016 PSU Minichess Tournament,
 where it was undefeated in matches against over 40 other AIs.
 
 The guiding principles in development of Dougchess were high performance and iterative testing.
 During development, careful attention was taken to keep code fast, simple, and modular.
-Each potential new feature was tested extensively to determine whether it was worth the performance cost.
+Each potential new feature was tested to determine whether it was worth the performance cost, and I ruthlessly cut those that were not.
 Examples of cut features include the endgame database (a large transposition table makes this unnecessary, due
 to the reduced search space in Minichess) and numerous evaluation heuristics (since eval() is called
 exponentially many times, it is vital that it do as little work as possible).
 
-#Prerequisites
+## License
+This software is distributed under the GNU General Public License. See the file COPYING in this repository for more information. 
+
+## Prerequisites
 Dougchess has been tested on Ubuntu Linux ONLY.
 
 Douchess requires libzmq version 3.x.x. In addition to Dougchess, you must
@@ -29,14 +32,14 @@ The minichess AI framework can be found here: https://github.com/CodeRect/teachi
 In addition, the Framework source code is included in this repository, in the framework directory.
 The minichess framework is distributed under the GNU GPL v. 3.0.
 
-#Building 
+## Building 
 To build, use the included makefile:
 
 > make
 
 The binary will appear at bin/dougchess.
 
-#Starting the AI
+## Starting the AI
 To run Dougchess, you must run both Dougchess itself and the Minichess framework.
 
 To run Dougchess: 
@@ -51,17 +54,17 @@ Then, navigate to http://localhost:8080 in a web browser. Once the AI connects,
 you should see the Minichess interface. See the Minichess Framework readme for more
 details on building the framework.
 
-#Playing against the AI
+## Playing against the AI
 Clicking on pieces in the browser interface will allow you to move them. You may ask the AI
 to make a move at any time by hitting the chess_moveAlphabeta button. This button includes two
 parameters: the maximum search duration and the maximum search depth. Increase the search depth
 for more challenging play but slower moves.
 
-#Challenging other AIs
+## Challenging other AIs
 To initiate a match against another AI, you must use the 'Internet' box at the bottom of the Framework
 interface. See the Framework readme for more details on using this feature.
 
-#Playing the AI against itself
+## Playing the AI against itself
 Since you probably won't find many other AIs online, the easiest way to see Dougchess
 in action is to start two separate instances of the framework, log in via two accounts, and initiate a match.
 If you have access to two separate machines, this is easy -- just install Dougchess and the framework on
