@@ -65,7 +65,7 @@ The --ap argument is the port on which the AI will connect. The --cp argument is
 ## Starting the Web Client
 The minichess framework is controlled via a web interface. To use it, you must first start the client (see above).Then, open your web browser and type the following into the address bar:
 
-> https://localhost:PORT
+> localhost:PORT
 
 Where PORT is the client port you specified when starting the framework (the --cp option).
 
