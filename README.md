@@ -23,23 +23,31 @@ Douchess requires libzmq version 3.x.x. In addition to Dougchess, you must
 install the Minichess framework, which provides a frontend for interacting
 with the AI.
 
-Additionally, Dougchess makes use of Boost Chrono for time managment. To install, on Ubuntu:
+To install libzmq version 3:
+
+> sudo apt-get install libzmq3-dev
+
+Additionally, Dougchess makes use two Boost libraries, chrono and program_options. to install them: 
 
 > sudo apt-get install libboost-chrono-dev
+> sudo apt-get install libboost-program-options-dev
 
-To download and install libzmq 3, look here: http://zeromq.org/intro:get-the-software
+The Minichess framework is included in the framework/ directory. You can find the original repo here: https://github.com/CodeRect/teaching-minichess
 
-The minichess AI framework can be found here: https://github.com/CodeRect/teaching-minichess
-
-In addition, the Framework source code is included in this repository, in the framework directory.
-The minichess framework is distributed under the GNU GPL v. 3.0.
-
-## Building 
+## Building Dougchess
 To build, use the included makefile:
 
 > make
 
 The binary will appear at bin/dougchess.
+
+## Building the Frameworkd
+
+To build the framework, cd into the framework/ directory and use the makefile:
+
+> make
+
+The framework binary will appear at framework/framework.
 
 ## Starting the AI
 To run Dougchess, you must run both Dougchess itself and the Minichess framework.
@@ -51,10 +59,23 @@ PORT is the port which will be used for communication with
 the Minichess framework, while NAME is the client name to register
 with the framework.
 
-To run the framework, simply build it and run the generated executable.
-Then, navigate to http://localhost:8080 in a web browser. Once the AI connects,
-you should see the Minichess interface. See the Minichess Framework readme for more
-details on building the framework.
+## Starting the Framework
+
+After building the framework, start it as follows:
+
+> framework/framework --ap=PORT --cp=PORT
+
+The --ap argument is the port on which the AI will connect. The --cp argument is the port on which the web client will connect. The default AI port is 54361, and the default web client port is 8080.
+
+## Starting the Web Client
+
+The minichess framework is controlled via a web interface. To use it, you must first start the client (see above).Then, open your web browser and type the following into the address bar:
+
+> https://localhost:PORT
+
+Where PORT is the client port you specified when starting the framework (the --cp option).
+
+See https://github.com/CodeRect/teaching-minichess for more information on using the web client.
 
 ## Playing against the AI
 Clicking on pieces in the browser interface will allow you to move them. You may ask the AI
