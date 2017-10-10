@@ -82,9 +82,8 @@ public:
 private:
   TimeManager& manager;
   ZobristTable& zobrist;
-  TranspositionTable& tt; 
+  TranspositionTable& tt;
   char board[RANKS][FILES];
-  int turn;
   void init_scoretable();
   void init_pawnpushtable();
   void init_boardmask();
@@ -92,12 +91,13 @@ private:
   int scoretable[128];
   int pawnpushtable[128][RANKS];
   int boardmask[128][RANKS][FILES];
-  
+
   // In place evaluation function -- always from white's
   // perspective
+  int turn;
+  char player;
   int score;
   // Piece counter for quicker evals
-  char player;
   //PawnPusherCenterControl evaluator;
   //PawnPusherEval evaluator;
   //SimpleEval evaluator;

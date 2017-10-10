@@ -18,11 +18,11 @@ using namespace std;
 Game::Game(TimeManager& manager,
 	   ZobristTable& zobrist,
 	   TranspositionTable& tt) : manager(manager),
-				     zobrist(zobrist),
-				     tt(tt),
-				     main_board(manager,
-						zobrist,
-						tt) {
+                                 zobrist(zobrist),
+                                 tt(tt),
+                                 main_board(manager,
+                                            zobrist,
+                                            tt) {
   main_board.reset();
 }
 

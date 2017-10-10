@@ -46,12 +46,10 @@ public:
   std::string moveAlphabeta(int depth, int duration);
 
 private:
-  Board main_board; // The current game board
   TimeManager& manager;
-  TranspositionTable& tt;
   ZobristTable& zobrist;
-
-  
+  TranspositionTable& tt;
+  Board main_board; // The current game board
 
 };
 

@@ -16,6 +16,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <stdexcept>
+
+#include <cstdint>
 //#include <gperftools/profiler.h>
 //#include <valgrind/callgrind.h>
 
@@ -48,8 +50,8 @@ inline std::vector<std::string> split(const std::string& s, char delim) {
 #define FILES 5
 #define DUMPSIZE 41
 #define isValid(y, x) ((x > -1) && (x < FILES) && (y > -1) && (y < RANKS))
-#define rankLookup(r) (RANKS-r) + 48
-#define fileLookup(f) f + 97 
+#define rankLookup(r) (RANKS-r) + (uint8_t) 48
+#define fileLookup(f) f + (uint8_t) 97
 #define ownp(piece, owner) ((owner == 'W') ? isupper(piece) : islower(piece))
 #define enemyp(piece, owner) ((owner == 'W') ? islower(piece) : isupper(piece))
 #define emptyp(piece) (piece == '.')
@@ -77,31 +79,31 @@ inline std::vector<std::string> split(const std::string& s, char delim) {
 class Square {
  public:
   Square() : rank(0), file(0) {}
-  Square(int rank, int file) : rank(rank), file(file) {}
+  Square(uint8_t rank, uint8_t file) : rank(rank), file(file) {}
 
   Square(const Square& other) : rank(other.rank), file(other.file) {}
   
   Square(const std::string& s) {
     char f = s[0];
     char r = s[1];
-    rank = -((int) r) + 48 + RANKS;
-    file = (int) f - 97;
+    rank = -((uint8_t) r) + 48 + RANKS;
+    file = (uint8_t) f - 97;
   }
   
   ~Square() {}
 
   std::string toString() const {
-    char temp[4] = { (char) fileLookup(file),
-		     (char) rankLookup(rank),
-		     '\0' };
+    char temp[4] = { static_cast<char>(fileLookup(file)),
+                     static_cast<char>(rankLookup(rank)),
+                     '\0' };
     return std::string(temp);
   }
 
-  int getRank() { return rank; }
-  int getFile() { return file; }
+  uint8_t getRank() { return rank; }
+  uint8_t getFile() { return file; }
 
-  int rank;
-  int file;
+  uint8_t rank;
+  uint8_t file;
 };
 
 

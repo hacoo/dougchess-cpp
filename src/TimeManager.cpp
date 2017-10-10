@@ -69,7 +69,6 @@ void TimeManager::start(const Board& board) {
 // Will be much more generous duing the first 20 turns of the game.
 int TimeManager::allot_time(const Board& board) {
   Board newboard(board);
-  char player = newboard.getPlayer();
   int turn    = newboard.getTurn();
   int turns_remaining = max(40 - turn, 1);
 

@@ -14,12 +14,13 @@ using namespace std;
 // Default constructor, initialize to an empty board
 Board::Board(TimeManager& manager,
 	     ZobristTable& zobrist,
-	     TranspositionTable& tt) : turn(0),
-				       player('W'),
-				       manager(manager),
-				       zobrist(zobrist),
-				       tt(tt),
-				       score(0) {
+	     TranspositionTable& tt) :
+  manager(manager),
+  zobrist(zobrist),
+  tt(tt),
+  turn(0),
+  player('W'),
+  score(0) {
 
   for (int y = 0; y < RANKS; ++y) {
       for (int x = 0; x < FILES; ++x)
@@ -35,12 +36,13 @@ Board::Board(TimeManager& manager,
 
 // Copy constructor -- does NOT copy undo history
 Board::Board(const Board& other) 
-  : turn(other.turn), 
-    player(other.player),
-    manager(manager),
-    zobrist(other.zobrist),
-    tt(other.tt),
-    score(other.score) {
+  :
+  manager(other.manager),
+  zobrist(other.zobrist),
+  tt(other.tt),
+  turn(other.turn),
+  player(other.player),
+  score(other.score) {
   
   for (int y = 0; y < RANKS; ++y) {
     for (int x = 0; x < FILES; ++x) {
