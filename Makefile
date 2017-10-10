@@ -16,7 +16,7 @@ C_SOURCES := $(wildard $(SRCDIR/*.$(C_SRCEXT)))
 OBJECTS   := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 OBJECTS   += $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(C_SOURCES:.$(C_SRCEXT)=.o))
 CFLAGS    := -g -Wall -std=c++1y -O3 -march=native -mtune=native
-LIB       := -pthread -lm -lzmq -L lib 
+LIB       := -pthread -lm -lzmq -lboost_program_options -L lib
 INC       := -I include -I /usr/local/lib/include/bsoncxx/v_noabi/ -I /usr/local/lib/include/mongocxx/v_noabi/
 
 $(TARGET): $(OBJECTS)
