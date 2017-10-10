@@ -4,6 +4,8 @@
 Dougchess is a high performance C++ Minichess AI. It took 1st place in the 2016 PSU Minichess Tournament,
 where it was undefeated in matches against over 40 other AIs.
 
+Dougchess is named after Doug the dog, who is very good at being a dog, but needs help with chess.
+
 The guiding principles in development of Dougchess were high performance and iterative testing.
 During development, careful attention was taken to keep code fast, simple, and modular.
 Each potential new feature was tested to determine whether it was worth the performance cost, and I ruthlessly cut those that were not.
