@@ -29,8 +29,7 @@ To install libzmq version 3:
 
 Additionally, Dougchess makes use two Boost libraries, chrono and program_options. to install them: 
 
-> sudo apt-get install libboost-chrono-dev
-> sudo apt-get install libboost-program-options-dev
+> sudo apt-get install libboost-chrono-dev libboost-program-options-dev
 
 The Minichess framework is included in the framework/ directory. You can find the original repo here: https://github.com/CodeRect/teaching-minichess
 
@@ -41,8 +40,7 @@ To build, use the included makefile:
 
 The binary will appear at bin/dougchess.
 
-## Building the Frameworkd
-
+## Building the Framework
 To build the framework, cd into the framework/ directory and use the makefile:
 
 > make
@@ -55,12 +53,9 @@ To run Dougchess, you must run both Dougchess itself and the Minichess framework
 To run Dougchess: 
 > bin/dougchess -p PORT -n NAME
 
-PORT is the port which will be used for communication with
-the Minichess framework, while NAME is the client name to register
-with the framework.
+PORT is the port which will be used for communication with the Minichess framework, while NAME is the client name to register with the framework.
 
 ## Starting the Framework
-
 After building the framework, start it as follows:
 
 > framework/framework --ap=PORT --cp=PORT
@@ -68,7 +63,6 @@ After building the framework, start it as follows:
 The --ap argument is the port on which the AI will connect. The --cp argument is the port on which the web client will connect. The default AI port is 54361, and the default web client port is 8080.
 
 ## Starting the Web Client
-
 The minichess framework is controlled via a web interface. To use it, you must first start the client (see above).Then, open your web browser and type the following into the address bar:
 
 > https://localhost:PORT
@@ -80,7 +74,7 @@ See https://github.com/CodeRect/teaching-minichess for more information on using
 ## Playing against the AI
 Clicking on pieces in the browser interface will allow you to move them. You may ask the AI
 to make a move at any time by hitting the chess_moveAlphabeta button. This button includes two
-parameters: the maximum search duration and the maximum search depth. Increase the search depth
+parameters: the maximum search duration and the maximum search depth. Increase the search depth and duration
 for more challenging play but slower moves.
 
 ## Challenging other AIs
@@ -100,14 +94,12 @@ two AIs might look something like this:
 Starting the first AI:
 > douchess/bin/dougchess -port 10000 -name aione
 
-> framework/framework -ai_port 10000 -client_port 8080
+> framework/framework --ap=10000 --cp=8080
 
 Then, in a second terminal, start the other AI: 
 > dougchess/bin/dougchess -port 10001 -name aitwo
 
-> framework/framework -ai_port 10001 -client_port 8081
+> framework/framework -ap=10001 -cp=8081
 
 Then, start two browser windows, one connecting to localhost:8080 and the other to localhost:8081.
 Log in to separate IMCS accounts on each, and watch your AIs duke it out.
-
-In the future, I plan to add a 'self-play' button to make this easier :)
